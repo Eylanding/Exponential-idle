@@ -147,15 +147,15 @@ var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier);
     let bonus = theory.publicationMultiplier;
 
-    q1 = q1 + dt * getDQ1(dq1.level) * q2;
-    q2 = q2 + dt * getDQ2(dq2.level) * (qTerms.level > 0 ? q3 : BigNumber.ONE);
-    if (qTerms.level > 0) q3 = q3 + dt * getDQ3(dq3.level) * (qTerms.level > 1 ? q4 : BigNumber.ONE);
-    if (qTerms.level > 1) q4 = q4 + dt * getDQ4(dq4.level);
+    q1 = q1 + 150 * dt * getDQ1(dq1.level) * q2;
+    q2 = q2 + 150 * dt * getDQ2(dq2.level) * (qTerms.level > 0 ? q3 : BigNumber.ONE);
+    if (qTerms.level > 0) q3 = q3 + 150 * dt * getDQ3(dq3.level) * (qTerms.level > 1 ? q4 : BigNumber.ONE);
+    if (qTerms.level > 1) q4 = q4 + 150 * dt * getDQ4(dq4.level);
 
-    r1 = r1 + dt * getDR1(dr1.level) * r2;
-    r2 = r2 + dt * getDR2(dr2.level) * (rTerms.level > 0 ? r3 : BigNumber.ONE);
-    if (rTerms.level > 0) r3 = r3 + dt * getDR3(dr3.level) * (rTerms.level > 1 ? r4 : BigNumber.ONE);
-    if (rTerms.level > 1) r4 = r4 + dt * getDR4(dr4.level);
+    r1 = r1 + 150 * dt * getDR1(dr1.level) * r2;
+    r2 = r2 + 150 * dt * getDR2(dr2.level) * (rTerms.level > 0 ? r3 : BigNumber.ONE);
+    if (rTerms.level > 0) r3 = r3 + 150 * dt * getDR3(dr3.level) * (rTerms.level > 1 ? r4 : BigNumber.ONE);
+    if (rTerms.level > 1) r4 = r4 + 150 * dt * getDR4(dr4.level);
 
     currency.value += 150 * bonus * dt * (q1.pow(getQ1Exp(q1Exp.level)) *
                                     r1.pow(getR1Exp(r1Exp.level)));
