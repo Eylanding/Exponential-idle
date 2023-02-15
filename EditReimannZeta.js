@@ -4,9 +4,9 @@ import { parseBigNumber, BigNumber } from "../api/BigNumber";
 import { theory } from "../api/Theory";
 import { Utils } from "../api/Utils";
 
-var id = "riemann_zeta"
-var name = "Riemann Zeta";
-var description = "not null";
+var id = "edit_riemann_zeta"
+var name = "Edited Riemann Zeta";
+var description = "hopefully not null";
 var authors = "";
 var version = 1;
 var releaseOrder = "6";
