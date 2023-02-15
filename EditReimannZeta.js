@@ -6,7 +6,7 @@ import { Utils } from "../api/Utils";
 
 var id = "edit_riemann_zeta"
 var name = "Edited Riemann Zeta";
-var description = "hopefully not null";
+var description = "hopeing it's not null";
 var authors = "";
 var version = 1;
 var releaseOrder = "6";
