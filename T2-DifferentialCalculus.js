@@ -145,7 +145,7 @@ var updateAvailability = () => {
 
 var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier);
-    let bonus = theory.publicationMultiplier * 150;
+    let bonus = theory.publicationMultiplier;
 
     q1 = q1 + dt * getDQ1(dq1.level) * q2;
     q2 = q2 + dt * getDQ2(dq2.level) * (qTerms.level > 0 ? q3 : BigNumber.ONE);
@@ -157,7 +157,7 @@ var tick = (elapsedTime, multiplier) => {
     if (rTerms.level > 0) r3 = r3 + dt * getDR3(dr3.level) * (rTerms.level > 1 ? r4 : BigNumber.ONE);
     if (rTerms.level > 1) r4 = r4 + dt * getDR4(dr4.level);
 
-    currency.value += bonus * dt * (q1.pow(getQ1Exp(q1Exp.level)) *
+    currency.value += 150 * bonus * dt * (q1.pow(getQ1Exp(q1Exp.level)) *
                                     r1.pow(getR1Exp(r1Exp.level)));
 
     theory.invalidateQuaternaryValues();
