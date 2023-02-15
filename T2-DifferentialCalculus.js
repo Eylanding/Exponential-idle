@@ -145,7 +145,7 @@ var updateAvailability = () => {
 
 var tick = (elapsedTime, multiplier) => {
     let dt = BigNumber.from(elapsedTime * multiplier);
-    let bonus = theory.publicationMultiplier;
+    let bonus = theory.publicationMultiplier * 150;
 
     q1 = q1 + dt * getDQ1(dq1.level) * q2;
     q2 = q2 + dt * getDQ2(dq2.level) * (qTerms.level > 0 ? q3 : BigNumber.ONE);
