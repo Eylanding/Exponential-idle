@@ -34,6 +34,7 @@ var init = () => {
         a1 = theory.createUpgrade(0, currencyI, new FirstFreeCost(new ExponentialCost(5, Math.log2(1.26))));
         a1.getDescription = (_) => Utils.getMath(getDesc(a1.level));
         a1.getInfo = (amount) => Utils.getMathTo(getInfo(a1.level), getInfo(a1.level + amount));
+        a1.maxLevel = 1000
     }
 
     // a2
