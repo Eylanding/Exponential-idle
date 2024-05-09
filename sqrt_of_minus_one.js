@@ -51,7 +51,7 @@ var init = () => {
     // c1
     {
         let getDesc = (level) => "\\sqrt{c_1}=(-2)^{" + level + "}";
-        let getInfo = (level) => "\\sqrt{c_1}=" + ((level % 2 == 1) ? '-' : '') + getC1(level).pow(0.5).toString(0);
+        let getInfo = (level) => "\\sqrt{c_1}=" + getC1(level).pow(0.5).toString(0) + ((level % 2 == 1) ? 'i' : '');
         c1 = theory.createUpgrade(2, currencyR, new ExponentialCost(10, Math.log2(2)));
         c1.getDescription = (_) => Utils.getMath(getDesc(c1.level));
         c1.getInfo = (amount) => Utils.getMathTo(getInfo(c1.level), getInfo(c1.level + amount));
@@ -60,7 +60,7 @@ var init = () => {
     // c2
     {
         let getDesc = (level) => "c_2=(-2)^{" + level + "}";
-        let getInfo = (level) => "c_2=" + ((level % 2 == 1) ? '-' : '') + getC2(level).toString(0);
+        let getInfo = (level) => "\\sqrt{c_2^{2}}=" + getC2(level).toString(0);
         c2 = theory.createUpgrade(3, currencyI, new ExponentialCost(10, Math.log2(3.3)));
         c2.getDescription = (_) => Utils.getMath(getDesc(c2.level));
         c2.getInfo = (amount) => Utils.getMathTo(getInfo(c2.level), getInfo(c2.level + amount));
@@ -69,7 +69,7 @@ var init = () => {
     // c3
     {
         let getDesc = (level) => "c_3=(-2)^{" + level + "}";
-        let getInfo = (level) => "c_3^{1.5}="  + ((level % 2 == 1) ? '-' : '') + getC3(level).pow(1.5).toString(0);
+        let getInfo = (level) => "\\sqrt{c_3^{3}}=" + getC3(level).pow(1.5).toString(0) + ((level % 2 == 1) ? 'i' : '');
         c3 = theory.createUpgrade(4, currencyR, new ExponentialCost(5000, Math.log2(7.5)));
         c3.getDescription = (_) => Utils.getMath(getDesc(c3.level));
         c3.getInfo = (amount) => Utils.getMathTo(getInfo(c3.level), getInfo(c3.level + amount));
@@ -78,7 +78,7 @@ var init = () => {
     // c4
     {
         let getDesc = (level) => "c_4=(-2)^{" + level + "}";
-        let getInfo = (level) => "c_4^{2}="  + ((level % 2 == 1) ? '-' : '') + getC4(level).pow(2).toString(0);
+        let getInfo = (level) => "\\sqrt{c_4^{4}}=" + getC4(level).pow(2).toString(0);
         c4 = theory.createUpgrade(5, currencyI, new ExponentialCost(5000, Math.log2(9.5)));
         c4.getDescription = (_) => Utils.getMath(getDesc(c4.level));
         c4.getInfo = (amount) => Utils.getMathTo(getInfo(c4.level), getInfo(c4.level + amount));
