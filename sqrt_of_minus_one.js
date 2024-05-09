@@ -18,6 +18,8 @@ var q;
 var achievement1, achievement2, achievement3, achievement4, achievement5, achievement6;
 var chapter1, chapter2;
 
+var sellC1Timer = 0;
+
 var rhodotR, rhodotI, dt, bonus;
 
 var init = () => {
@@ -89,9 +91,9 @@ var init = () => {
     theory.createAutoBuyerUpgrade(2, currencyR, 0);
     {
         sellc1 = theory.createPermanentUpgrade(3, currencyI, new FreeCost);
-        sellc1.getDescription = (_) => "Decrease c1 level by 1 (no refund)";
-        sellc1.getInfo = (amount) => "Reduces c1 level by 1 to swap from real to imaginary";
-        sellc1.bought = (_) => {sellc1.level = 0; c1.level = c1.level >= 1 ? c1.level - 1 : 0}
+        sellc1.getDescription = (level) => "Decrease c1 level by 1 (" + (sellc1.level > 0 ? (sellc1.level.toString() + "/ 10") : ("No refund")) + ")";
+        sellc1.getInfo = (_) => "Reduces c1 level by 1 to swap from real to imaginary";
+        sellc1.bought = (_) => {if (sellc1.level > 9){sellc1.level = 0; c1.level = c1.level >= 1 ? c1.level - 1 : 0}; sellC1Timer = 0}
     }
 
     ///////////////////////
@@ -139,6 +141,11 @@ var updateAvailability = () => {
 var tick = (elapsedTime, multiplier) => {
 
     dt = BigNumber.from(elapsedTime * multiplier);
+    sellC1Timer += dt
+    if (sellC1Timer > 10) {
+        sellC1Timer = -100000
+        sellc1.level = 0
+    }
     bonus = theory.publicationMultiplier;
     rhodotR = 0;
     rhodotI = 0;
