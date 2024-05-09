@@ -88,11 +88,10 @@ var init = () => {
     theory.createBuyAllUpgrade(1, currencyR, 1e10);
     theory.createAutoBuyerUpgrade(2, currencyR, 0);
     {
-        let getDesc = (level) => "decrease c_1 level by 1 (no refund)";
-        let getInfo = (level) => "reduces c_1 level by 1 and lowers it's cost by the same amount";
-        sellc1 = theory.createPermanentUpgrade(3, currencyI, new ExponentialCost(0, Math.log2(1)));
-        sellc1.getDescription = (_) => Utils.getMath(getDesc(sellc1.level));
-        sellc1.getInfo = (amount) => Utils.getMathTo(getInfo(sellc1.level), getInfo(sellc1.level + amount));
+        sellc1 = theory.createPermanentUpgrade(3, currencyI, new FreeCost);
+        sellc1.getDescription = (_) => "Decrease c1 level by 1 (no refund)";
+        sellc1.getInfo = (amount) => "Reduces c1 level by 1 to swap from real to imaginary";
+        sellc1.bought = (_) => {sellc1.level = 0; c1.level = c1.level >= 1 ? c1.level - 1 : 0}
     }
 
     ///////////////////////
