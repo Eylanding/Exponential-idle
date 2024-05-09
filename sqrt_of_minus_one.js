@@ -50,7 +50,7 @@ var init = () => {
 
     // c1
     {
-        let getDesc = (level) => "\\sqrt{c_1}=(-2)^{" + level + "}";
+        let getDesc = (level) => "c_1=(-2)^{" + level + "}";
         let getInfo = (level) => "\\sqrt{c_1}=" + getC1(level).pow(0.5).toString(0) + ((level % 2 == 1) ? 'i' : '');
         c1 = theory.createUpgrade(2, currencyR, new ExponentialCost(10, Math.log2(2)));
         c1.getDescription = (_) => Utils.getMath(getDesc(c1.level));
