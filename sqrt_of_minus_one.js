@@ -196,10 +196,10 @@ var setInternalState = (stateStr) =>
 var getPrimaryEquation = () => {
     let rhoPart = "\\dot{\\rho} = ";
 
-    rhoPart += "\\sqrt{c_1} + \\sqrt{c_2^{2}} + \\sqrt{c_3^{3}} + \\sqrt{c_4^{4}}";
+    rhoPart += "\\sum_{n=1}^{4}\\sqrt{c_n^n}";
     otherPart = "\\rho_1 = a_1" + (a1Exp.level > 0 ? ("^{" + getA1Exponent(a1Exp.level).toString() + "}") : "") + "Re(\\rho), \\rho_2 = a_2 "+ (a2Exp.level > 0 ? ("^{" + getA2Exponent(a2Exp.level).toString() + "}") : "") + " Im(\\rho)"
     
-    theory.primaryEquationHeight = 66;
+    theory.primaryEquationHeight = 90;
     return `\\begin{array}{c}${rhoPart}\\\\${otherPart}\\end{array}`;
 
 }
