@@ -125,10 +125,10 @@ var init = () => {
 
     ///////////////////
     //// Story chapters
-    chapter1 = theory.createStoryChapter(0, "My First Chapter",
-        "This is line 1,\n" + 
-        "and this is line 2.",
-    () => a1.level > 0);
+    //chapter1 = theory.createStoryChapter(0, "My First Chapter",
+    //    "This is line 1,\n" + 
+    //    "and this is line 2.",
+    //() => a1.level > 0);
     //chapter2 = theory.createStoryChapter(1, "My Second Chapter", "This is line 1 again,\nand this is line 2... again.\n\nNice again.", () => c2.level > 0);
 
     updateAvailability();
