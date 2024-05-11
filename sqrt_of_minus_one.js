@@ -98,7 +98,7 @@ var init = () => {
 
     ///////////////////////
     //// Milestone Upgrades
-    theory.setMilestoneCost(new LinearCost(2.5, 2.5));
+    theory.setMilestoneCost(new LinearCost(25/4, 25/4));
 
     {
         a1Exp = theory.createMilestoneUpgrade(0, 2);
@@ -206,11 +206,11 @@ var getPrimaryEquation = () => {
 
 var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho^{0.1}";
 var getTertiaryEquation = () => "\\dot{\\rho_1} = " + bonus * rhodotR + ',\\dot{\\rho_2} = ' + bonus * rhodotI;
-var getPublicationMultiplier = (tau) => tau.pow(1.5);
-var getPublicationMultiplierFormula = (symbol) => "{" + symbol + "}^{1.5}";
-var getTau = () => currencyR.value.pow(BigNumber.ONE / BigNumber.TEN);
+var getPublicationMultiplier = (tau) => tau.pow(0.375);
+var getPublicationMultiplierFormula = (symbol) => "{" + symbol + "}^{0.375}";
+var getTau = () => currencyR.value.pow(BigNumber.ONE / BigNumber.FOUR);
 var get2DGraphValue = () => currencyR.value.sign * (BigNumber.ONE + currencyR.value.abs()).log10().toNumber();
-var getCurrencyFromTau  = (tau) => [tau.pow(10), currencyR.symbol]
+var getCurrencyFromTau  = (tau) => [tau.pow(4), currencyR.symbol]
 
 var getA1 = (level) => Utils.getStepwisePowerSum(level, 2, 10, 0);
 var getA2 = (level) => Utils.getStepwisePowerSum(level, 2, 10, 0);
