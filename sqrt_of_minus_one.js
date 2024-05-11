@@ -6,7 +6,7 @@ import { Utils } from "./api/Utils";
 
 var id = "sqrt_of_minus_one";
 var name = "The square root of -1";
-var description = "Work with complex numbers to boost the theory.\nBalance increacing rho1 and 2 to maximise gains\nWIP\nVersion 1.0.0";
+var description = "Work with complex numbers to boost the theory.\nBalance increacing rho1 and 2 to maximise gains\nWIP\nVersion 1.0.1";
 var authors = "Eylanding";
 var version = 1;
 
