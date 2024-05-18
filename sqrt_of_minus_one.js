@@ -6,7 +6,7 @@ import { Utils } from "./api/Utils";
 
 var id = "sqrt_of_minus_one";
 var name = "The square root of -1";
-var description = "Work with complex numbers to boost the theory.\nBalance increacing rho1 and 2 to maximise gains\nWIP\nVersion 1.0.1";
+var description = "Work with complex numbers to boost the theory.\nBalance increacing rho1 and 2 to maximise gains\nWIP\nVersion 1.0.2";
 var authors = "Eylanding";
 var version = 1;
 
@@ -52,7 +52,7 @@ var init = () => {
     {
         let getDesc = (level) => "c_1=(-2)^{" + level + "}";
         let getInfo = (level) => "\\sqrt{c_1}=" + getC1(level).pow(0.5).toString(0) + ((level % 2 == 1) ? 'i' : '');
-        c1 = theory.createUpgrade(2, currencyR, new ExponentialCost(10, Math.log2(2)));
+        c1 = theory.createUpgrade(2, currencyR, new ExponentialCost(10, Math.log2(1.8)));
         c1.getDescription = (_) => Utils.getMath(getDesc(c1.level));
         c1.getInfo = (amount) => Utils.getMathTo(getInfo(c1.level), getInfo(c1.level + amount));
     }
@@ -61,7 +61,7 @@ var init = () => {
     {
         let getDesc = (level) => "c_2=(-2)^{" + level + "}";
         let getInfo = (level) => "\\sqrt{c_2^{2}}=" + getC2(level).toString(0);
-        c2 = theory.createUpgrade(3, currencyI, new ExponentialCost(5, Math.log2(3.3)));
+        c2 = theory.createUpgrade(3, currencyI, new ExponentialCost(5, Math.log2(3)));
         c2.getDescription = (_) => Utils.getMath(getDesc(c2.level));
         c2.getInfo = (amount) => Utils.getMathTo(getInfo(c2.level), getInfo(c2.level + amount));
     }
@@ -196,18 +196,18 @@ var setInternalState = (stateStr) =>
 var getPrimaryEquation = () => {
     let rhoPart = "\\dot{\\rho} = ";
 
-    rhoPart += "\\sqrt{c_1} + \\sqrt{c_2^{2}} + \\sqrt{c_3^{3}} + \\sqrt{c_4^{4}}";
+    rhoPart += "\\sum_{n=1}^{4}\\sqrt{c_n^n}";
     otherPart = "\\rho_1 = a_1" + (a1Exp.level > 0 ? ("^{" + getA1Exponent(a1Exp.level).toString() + "}") : "") + "Re(\\rho), \\rho_2 = a_2 "+ (a2Exp.level > 0 ? ("^{" + getA2Exponent(a2Exp.level).toString() + "}") : "") + " Im(\\rho)"
     
-    theory.primaryEquationHeight = 66;
+    theory.primaryEquationHeight = 90;
     return `\\begin{array}{c}${rhoPart}\\\\${otherPart}\\end{array}`;
 
 }
 
-var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho^{0.1}";
+var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho^{0.4}";
 var getTertiaryEquation = () => "\\dot{\\rho_1} = " + bonus * rhodotR + ',\\dot{\\rho_2} = ' + bonus * rhodotI;
-var getPublicationMultiplier = (tau) => tau.pow(0.375);
-var getPublicationMultiplierFormula = (symbol) => "{" + symbol + "}^{0.375}";
+var getPublicationMultiplier = (tau) => 4*tau.pow(0.4);
+var getPublicationMultiplierFormula = (symbol) => "4{" + symbol + "}^{0.4}";
 var getTau = () => currencyR.value.pow(BigNumber.ONE / BigNumber.FOUR);
 var get2DGraphValue = () => currencyR.value.sign * (BigNumber.ONE + currencyR.value.abs()).log10().toNumber();
 var getCurrencyFromTau  = (tau) => [tau.pow(4), currencyR.symbol]
