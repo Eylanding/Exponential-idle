@@ -98,7 +98,7 @@ var init = () => {
 
     ///////////////////////
     //// Milestone Upgrades
-    theory.setMilestoneCost(new LinearCost(25/4, 25/4));
+    theory.setMilestoneCost(new LinearCost(25*0.4, 25*0.4));
 
     {
         a1Exp = theory.createMilestoneUpgrade(0, 2);
@@ -210,7 +210,7 @@ var getPublicationMultiplier = (tau) => tau.pow(0.4);
 var getPublicationMultiplierFormula = (symbol) => "{" + symbol + "}^{0.4}";
 var getTau = () => currencyR.value.pow(0.4);
 var get2DGraphValue = () => currencyR.value.sign * (BigNumber.ONE + currencyR.value.abs()).log10().toNumber();
-var getCurrencyFromTau  = (tau) => [tau.pow(4), currencyR.symbol]
+var getCurrencyFromTau  = (tau) => [tau.pow(1/0.4), currencyR.symbol]
 
 var getA1 = (level) => Utils.getStepwisePowerSum(level, 2, 10, 0);
 var getA2 = (level) => Utils.getStepwisePowerSum(level, 2, 10, 0);
