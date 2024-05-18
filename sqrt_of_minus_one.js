@@ -208,7 +208,7 @@ var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho^{0.4}";
 var getTertiaryEquation = () => "\\dot{\\rho_1} = " + bonus * rhodotR + ',\\dot{\\rho_2} = ' + bonus * rhodotI;
 var getPublicationMultiplier = (tau) => tau.pow(0.4);
 var getPublicationMultiplierFormula = (symbol) => "{" + symbol + "}^{0.4}";
-var getTau = () => currencyR.value.pow(BigNumber.ONE / BigNumber.FOUR);
+var getTau = () => currencyR.value.pow(0.4);
 var get2DGraphValue = () => currencyR.value.sign * (BigNumber.ONE + currencyR.value.abs()).log10().toNumber();
 var getCurrencyFromTau  = (tau) => [tau.pow(4), currencyR.symbol]
 
