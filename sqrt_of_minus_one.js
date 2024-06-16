@@ -12,7 +12,8 @@ var version = 1;
 
 var currencyR, currencyI;
 var a1, a2, c1, c2, c3, c4;
-var c1boost, a1Exp, a2Exp
+var c1boost, a1Exp, a2Exp;
+const a12expTable = [1, 1.1, 1.15];
 var q;
 
 var achievement1, achievement2, achievement3, achievement4, achievement5, achievement6;
@@ -122,15 +123,15 @@ var init = () => {
 
     {
         a1Exp = theory.createMilestoneUpgrade(1, 2);
-        a1Exp.description = Localization.getUpgradeIncCustomExpDesc("a_1", "0.1");
-        a1Exp.info = Localization.getUpgradeIncCustomExpInfo("a_1", "0.1");
+        a1Exp.getDescription = (amount) => Localization.getUpgradeIncCustomExpDesc("a_1", Math.round((a12expTable[a1Exp.level + amount] - a12expTable[a1Exp.level] || 0) * 100) / 100);
+        a1Exp.getInfo = (amount) => Localization.getUpgradeIncCustomExpInfo("a_1", Math.round((a12expTable[a1Exp.level + amount] - a12expTable[a1Exp.level] || 0) * 100) / 100);
         a1Exp.boughtOrRefunded = (_) => theory.invalidatePrimaryEquation();
     }
 
     {
         a2Exp = theory.createMilestoneUpgrade(2, 2);
-        a2Exp.description = Localization.getUpgradeIncCustomExpDesc("a_2", "0.1");
-        a2Exp.info = Localization.getUpgradeIncCustomExpInfo("a_2", "0.1");
+        a2Exp.getDescription = (amount) => Localization.getUpgradeIncCustomExpDesc("a_2", Math.round((a12expTable[a2Exp.level + amount] - a12expTable[a2Exp.level] || 0) * 100) / 100);
+        a2Exp.getInfo = (amount) => Localization.getUpgradeIncCustomExpInfo("a_2", Math.round((a12expTable[a2Exp.level + amount] - a12expTable[a2Exp.level] || 0) * 100) / 100);
         a2Exp.boughtOrRefunded = (_) => theory.invalidatePrimaryEquation();
     }
 
@@ -239,7 +240,7 @@ var getC1 = (level) => BigNumber.TWO.pow(level) * (c1buff.level >= 1 ? 200 : 1)
 var getC2 = (level) => BigNumber.TWO.pow(level)
 var getC3 = (level) => BigNumber.TWO.pow(level)
 var getC4 = (level) => BigNumber.TWO.pow(level)
-var getA1Exponent = (level) => BigNumber.from(1 + 0.1 * level);
-var getA2Exponent = (level) => BigNumber.from(1 + 0.1 * level);
+var getA1Exponent = (level) => BigNumber.from(a12expTable[level]);
+var getA2Exponent = (level) => BigNumber.from(a12expTable[level]);
 
 init();
