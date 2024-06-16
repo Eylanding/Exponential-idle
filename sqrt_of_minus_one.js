@@ -6,13 +6,14 @@ import { Utils } from "./api/Utils";
 
 var id = "sqrt_of_minus_one";
 var name = "The square root of -1";
-var description = "Work with complex numbers to boost the theory.\nBalance increacing rho1 and 2 to maximise gains\nWIP\nVersion 1.0.2";
+var description = "Work with complex numbers to boost the theory.\nBalance increacing rho1 and 2 to maximise gains\nWIP\nVersion 1.1.0";
 var authors = "Eylanding";
 var version = 1;
 
 var currencyR, currencyI;
 var a1, a2, c1, c2, c3, c4;
-var a1Exp, a2Exp
+var c1boost, a1Exp, a2Exp;
+const a12expTable = [1, 1.1, 1.15];
 var q;
 
 var achievement1, achievement2, achievement3, achievement4, achievement5, achievement6;
@@ -36,7 +37,7 @@ var init = () => {
         a1 = theory.createUpgrade(0, currencyI, new FirstFreeCost(new ExponentialCost(5, Math.log2(1.26))));
         a1.getDescription = (_) => Utils.getMath(getDesc(a1.level));
         a1.getInfo = (amount) => Utils.getMathTo(getInfo(a1.level), getInfo(a1.level + amount));
-        a1.maxLevel = 1000
+        a1.maxLevel = 2000
     }
 
     // a2
@@ -50,7 +51,7 @@ var init = () => {
 
     // c1
     {
-        let getDesc = (level) => "c_1=(-2)^{" + level + "}";
+        let getDesc = (level) => "c_1="+ (c1buff.level >= 1 ? "200\\times" : "") +"(-2)^{" + level + "}";
         let getInfo = (level) => "\\sqrt{c_1}=" + getC1(level).pow(0.5).toString(0) + ((level % 2 == 1) ? 'i' : '');
         c1 = theory.createUpgrade(2, currencyR, new ExponentialCost(10, Math.log2(1.95)));
         c1.getDescription = (_) => Utils.getMath(getDesc(c1.level));
@@ -70,7 +71,7 @@ var init = () => {
     {
         let getDesc = (level) => "c_3=(-2)^{" + level + "}";
         let getInfo = (level) => "\\sqrt{c_3^{3}}=" + getC3(level).pow(1.5).toString(0) + ((level % 2 == 1) ? 'i' : '');
-        c3 = theory.createUpgrade(4, currencyR, new ExponentialCost(5000, Math.log2(7.5)));
+        c3 = theory.createUpgrade(4, currencyR, new ExponentialCost(5000, Math.log2(7.1)));
         c3.getDescription = (_) => Utils.getMath(getDesc(c3.level));
         c3.getInfo = (amount) => Utils.getMathTo(getInfo(c3.level), getInfo(c3.level + amount));
     }
@@ -101,28 +102,36 @@ var init = () => {
 
     const milestoneCost = new CustomCost((level) =>
         {
-            if(level == 0) return BigNumber.from(25 * 0.4);
+            if(level == 0) return BigNumber.from(30 * 0.4);
             if(level == 1) return BigNumber.from(50 * 0.4);
-            if(level == 2) return BigNumber.from(75 * 0.4);
+            if(level == 2) return BigNumber.from(70 * 0.4);
             if(level == 3) return BigNumber.from(100 * 0.4);
-            if(level == 4) return BigNumber.from(125 * 0.4);
-            if(level == 5) return BigNumber.from(150 * 0.4);
+            if(level == 4) return BigNumber.from(200 * 0.4);
+            if(level == 5) return BigNumber.from(230 * 0.4);
             return BigNumber.from(-1);
         });
 
     theory.setMilestoneCost(milestoneCost);
 
     {
-        a1Exp = theory.createMilestoneUpgrade(0, 2);
-        a1Exp.description = Localization.getUpgradeIncCustomExpDesc("a_1", "0.1");
-        a1Exp.info = Localization.getUpgradeIncCustomExpInfo("a_1", "0.1");
+        c1buff = theory.createMilestoneUpgrade(0, 1);
+        c1buff.description = "Improve $c_1$ variable power"
+        c1buff.info = "Improve $c_1$ variable power";
+        c1buff.boughtOrRefunded = (_) => updateAvailability();
+        c1buff.canBeRefunded = () => (a1Exp.level == 0 && a2Exp.level == 0)
+    }
+
+    {
+        a1Exp = theory.createMilestoneUpgrade(1, 2);
+        a1Exp.getDescription = (amount) => Localization.getUpgradeIncCustomExpDesc("a_1", Math.round((a12expTable[a1Exp.level + amount] - a12expTable[a1Exp.level] || 0) * 100) / 100);
+        a1Exp.getInfo = (amount) => Localization.getUpgradeIncCustomExpInfo("a_1", Math.round((a12expTable[a1Exp.level + amount] - a12expTable[a1Exp.level] || 0) * 100) / 100);
         a1Exp.boughtOrRefunded = (_) => theory.invalidatePrimaryEquation();
     }
 
     {
-        a2Exp = theory.createMilestoneUpgrade(1, 2);
-        a2Exp.description = Localization.getUpgradeIncCustomExpDesc("a_2", "0.1");
-        a2Exp.info = Localization.getUpgradeIncCustomExpInfo("a_2", "0.1");
+        a2Exp = theory.createMilestoneUpgrade(2, 2);
+        a2Exp.getDescription = (amount) => Localization.getUpgradeIncCustomExpDesc("a_2", Math.round((a12expTable[a2Exp.level + amount] - a12expTable[a2Exp.level] || 0) * 100) / 100);
+        a2Exp.getInfo = (amount) => Localization.getUpgradeIncCustomExpInfo("a_2", Math.round((a12expTable[a2Exp.level + amount] - a12expTable[a2Exp.level] || 0) * 100) / 100);
         a2Exp.boughtOrRefunded = (_) => theory.invalidatePrimaryEquation();
     }
 
@@ -147,7 +156,8 @@ var init = () => {
 }
 
 var updateAvailability = () => {
-    
+    a1Exp.isAvailable = c1buff.level >= 1
+    a2Exp.isAvailable = c1buff.level >= 1
 }
 
 var tick = (elapsedTime, multiplier) => {
@@ -226,11 +236,11 @@ var getCurrencyFromTau  = (tau) => [tau.pow(1/0.4), currencyR.symbol]
 
 var getA1 = (level) => Utils.getStepwisePowerSum(level, 2, 10, 0);
 var getA2 = (level) => Utils.getStepwisePowerSum(level, 2, 10, 0);
-var getC1 = (level) => BigNumber.TWO.pow(level)
+var getC1 = (level) => BigNumber.TWO.pow(level) * (c1buff.level >= 1 ? 200 : 1)
 var getC2 = (level) => BigNumber.TWO.pow(level)
 var getC3 = (level) => BigNumber.TWO.pow(level)
 var getC4 = (level) => BigNumber.TWO.pow(level)
-var getA1Exponent = (level) => BigNumber.from(1 + 0.1 * level);
-var getA2Exponent = (level) => BigNumber.from(1 + 0.1 * level);
+var getA1Exponent = (level) => BigNumber.from(a12expTable[level]);
+var getA2Exponent = (level) => BigNumber.from(a12expTable[level]);
 
 init();
