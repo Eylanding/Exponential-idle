@@ -12,7 +12,7 @@ var version = 1;
 
 var currencyR, currencyI;
 var a1, a2, c1, c2, c3, c4;
-var a1Exp, a2Exp
+var c1boost, a1Exp, a2Exp
 var q;
 
 var achievement1, achievement2, achievement3, achievement4, achievement5, achievement6;
@@ -50,7 +50,7 @@ var init = () => {
 
     // c1
     {
-        let getDesc = (level) => "c_1=(-2)^{" + level + "}";
+        let getDesc = (level) => "c_1="+ (c1buff.level >= 1 ? 200 : "") +"(-2)^{" + level + "}";
         let getInfo = (level) => "\\sqrt{c_1}=" + getC1(level).pow(0.5).toString(0) + ((level % 2 == 1) ? 'i' : '');
         c1 = theory.createUpgrade(2, currencyR, new ExponentialCost(10, Math.log2(1.95)));
         c1.getDescription = (_) => Utils.getMath(getDesc(c1.level));
@@ -113,14 +113,22 @@ var init = () => {
     theory.setMilestoneCost(milestoneCost);
 
     {
-        a1Exp = theory.createMilestoneUpgrade(0, 2);
+        c1buff = theory.createMilestoneUpgrade(0, 1);
+        c1buff.description = "Improve $c_1$ variable power"
+        c1buff.info = "Improve $c_1$ variable power";
+        c1buff.boughtOrRefunded = (_) => updateAvailability();
+        c1buff.canBeRefunded = () => (a1Exp.level == 0 && a2Exp.level == 0)
+    }
+
+    {
+        a1Exp = theory.createMilestoneUpgrade(1, 2);
         a1Exp.description = Localization.getUpgradeIncCustomExpDesc("a_1", "0.1");
         a1Exp.info = Localization.getUpgradeIncCustomExpInfo("a_1", "0.1");
         a1Exp.boughtOrRefunded = (_) => theory.invalidatePrimaryEquation();
     }
 
     {
-        a2Exp = theory.createMilestoneUpgrade(1, 2);
+        a2Exp = theory.createMilestoneUpgrade(2, 2);
         a2Exp.description = Localization.getUpgradeIncCustomExpDesc("a_2", "0.1");
         a2Exp.info = Localization.getUpgradeIncCustomExpInfo("a_2", "0.1");
         a2Exp.boughtOrRefunded = (_) => theory.invalidatePrimaryEquation();
@@ -147,7 +155,8 @@ var init = () => {
 }
 
 var updateAvailability = () => {
-    
+    a1Exp.isAvailable = c1buff.level >= 1
+    a2Exp.isAvailable = c1buff.level >= 1
 }
 
 var tick = (elapsedTime, multiplier) => {
@@ -226,7 +235,7 @@ var getCurrencyFromTau  = (tau) => [tau.pow(1/0.4), currencyR.symbol]
 
 var getA1 = (level) => Utils.getStepwisePowerSum(level, 2, 10, 0);
 var getA2 = (level) => Utils.getStepwisePowerSum(level, 2, 10, 0);
-var getC1 = (level) => BigNumber.TWO.pow(level)
+var getC1 = (level) => BigNumber.TWO.pow(level) * (c1buff.level >= 1 ? 200 : 1)
 var getC2 = (level) => BigNumber.TWO.pow(level)
 var getC3 = (level) => BigNumber.TWO.pow(level)
 var getC4 = (level) => BigNumber.TWO.pow(level)
