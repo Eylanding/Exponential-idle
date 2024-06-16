@@ -52,7 +52,7 @@ var init = () => {
     {
         let getDesc = (level) => "c_1=(-2)^{" + level + "}";
         let getInfo = (level) => "\\sqrt{c_1}=" + getC1(level).pow(0.5).toString(0) + ((level % 2 == 1) ? 'i' : '');
-        c1 = theory.createUpgrade(2, currencyR, new ExponentialCost(10, Math.log2(1.8)));
+        c1 = theory.createUpgrade(2, currencyR, new ExponentialCost(10, Math.log2(1.95)));
         c1.getDescription = (_) => Utils.getMath(getDesc(c1.level));
         c1.getInfo = (amount) => Utils.getMathTo(getInfo(c1.level), getInfo(c1.level + amount));
     }
@@ -61,7 +61,7 @@ var init = () => {
     {
         let getDesc = (level) => "c_2=(-2)^{" + level + "}";
         let getInfo = (level) => "\\sqrt{c_2^{2}}=" + getC2(level).toString(0);
-        c2 = theory.createUpgrade(3, currencyI, new ExponentialCost(5, Math.log2(3)));
+        c2 = theory.createUpgrade(3, currencyI, new ExponentialCost(5, Math.log2(3.2)));
         c2.getDescription = (_) => Utils.getMath(getDesc(c2.level));
         c2.getInfo = (amount) => Utils.getMathTo(getInfo(c2.level), getInfo(c2.level + amount));
     }
@@ -86,7 +86,7 @@ var init = () => {
 
     /////////////////////
     // Permanent Upgrades
-    theory.createPublicationUpgrade(0, currencyR, 1e6);
+    theory.createPublicationUpgrade(0, currencyR, 5e6);
     theory.createBuyAllUpgrade(1, currencyR, 1e10);
     theory.createAutoBuyerUpgrade(2, currencyR, 0);
     {
@@ -98,7 +98,19 @@ var init = () => {
 
     ///////////////////////
     //// Milestone Upgrades
-    theory.setMilestoneCost(new LinearCost(25/4, 25/4));
+
+    const milestoneCost = new CustomCost((level) =>
+        {
+            if(level == 0) return BigNumber.from(25 * 0.4);
+            if(level == 1) return BigNumber.from(50 * 0.4);
+            if(level == 2) return BigNumber.from(75 * 0.4);
+            if(level == 3) return BigNumber.from(100 * 0.4);
+            if(level == 4) return BigNumber.from(125 * 0.4);
+            if(level == 5) return BigNumber.from(150 * 0.4);
+            return BigNumber.from(-1);
+        });
+
+    theory.setMilestoneCost(milestoneCost);
 
     {
         a1Exp = theory.createMilestoneUpgrade(0, 2);
@@ -206,11 +218,11 @@ var getPrimaryEquation = () => {
 
 var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho^{0.4}";
 var getTertiaryEquation = () => "\\dot{\\rho_1} = " + bonus * rhodotR + ',\\dot{\\rho_2} = ' + bonus * rhodotI;
-var getPublicationMultiplier = (tau) => 4*tau.pow(0.4);
-var getPublicationMultiplierFormula = (symbol) => "4{" + symbol + "}^{0.4}";
-var getTau = () => currencyR.value.pow(BigNumber.ONE / BigNumber.FOUR);
+var getPublicationMultiplier = (tau) => tau.pow(0.4);
+var getPublicationMultiplierFormula = (symbol) => "{" + symbol + "}^{0.4}";
+var getTau = () => currencyR.value.pow(0.4);
 var get2DGraphValue = () => currencyR.value.sign * (BigNumber.ONE + currencyR.value.abs()).log10().toNumber();
-var getCurrencyFromTau  = (tau) => [tau.pow(4), currencyR.symbol]
+var getCurrencyFromTau  = (tau) => [tau.pow(1/0.4), currencyR.symbol]
 
 var getA1 = (level) => Utils.getStepwisePowerSum(level, 2, 10, 0);
 var getA2 = (level) => Utils.getStepwisePowerSum(level, 2, 10, 0);
