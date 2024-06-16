@@ -50,7 +50,7 @@ var init = () => {
 
     // c1
     {
-        let getDesc = (level) => "c_1="+ (c1buff.level >= 1 ? 200 : "") +"(-2)^{" + level + "}";
+        let getDesc = (level) => "c_1="+ (c1buff.level >= 1 ? "200\\times" : "") +"(-2)^{" + level + "}";
         let getInfo = (level) => "\\sqrt{c_1}=" + getC1(level).pow(0.5).toString(0) + ((level % 2 == 1) ? 'i' : '');
         c1 = theory.createUpgrade(2, currencyR, new ExponentialCost(10, Math.log2(1.95)));
         c1.getDescription = (_) => Utils.getMath(getDesc(c1.level));
@@ -70,7 +70,7 @@ var init = () => {
     {
         let getDesc = (level) => "c_3=(-2)^{" + level + "}";
         let getInfo = (level) => "\\sqrt{c_3^{3}}=" + getC3(level).pow(1.5).toString(0) + ((level % 2 == 1) ? 'i' : '');
-        c3 = theory.createUpgrade(4, currencyR, new ExponentialCost(5000, Math.log2(7.5)));
+        c3 = theory.createUpgrade(4, currencyR, new ExponentialCost(5000, Math.log2(7.1)));
         c3.getDescription = (_) => Utils.getMath(getDesc(c3.level));
         c3.getInfo = (amount) => Utils.getMathTo(getInfo(c3.level), getInfo(c3.level + amount));
     }
