@@ -101,12 +101,12 @@ var init = () => {
 
     const milestoneCost = new CustomCost((level) =>
         {
-            if(level == 0) return BigNumber.from(25 * 0.4);
+            if(level == 0) return BigNumber.from(30 * 0.4);
             if(level == 1) return BigNumber.from(50 * 0.4);
-            if(level == 2) return BigNumber.from(75 * 0.4);
+            if(level == 2) return BigNumber.from(70 * 0.4);
             if(level == 3) return BigNumber.from(100 * 0.4);
-            if(level == 4) return BigNumber.from(125 * 0.4);
-            if(level == 5) return BigNumber.from(150 * 0.4);
+            if(level == 4) return BigNumber.from(200 * 0.4);
+            if(level == 5) return BigNumber.from(230 * 0.4);
             return BigNumber.from(-1);
         });
 
