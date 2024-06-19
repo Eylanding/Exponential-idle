@@ -16,7 +16,7 @@ var c1boost, a1Exp, a2Exp;
 const a12expTable = [1, 1.1, 1.15];
 var q;
 
-var achievement1, achievement2, achievement3, achievement4, achievement5, achievement6;
+var achievement1, achievement2, achievement3, achievement4, achievement5, achievement6, achievement7, achievement8, achievement9;
 var chapter1, chapter2;
 
 var sellC1Timer = 0;
@@ -137,12 +137,15 @@ var init = () => {
 
     /////////////////
     //// Achievements
-    achievement1 = theory.createAchievement(0, "Not quite exponential", "Get 10 tau", () => currencyR.value > BigNumber.TEN.pow(BigNumber.from(10)));
-    achievement2 = theory.createAchievement(1, "Getting there", "Get 1e5 tau", () => currencyR.value > BigNumber.TEN.pow(BigNumber.from(50)));
-    achievement3 = theory.createAchievement(2, "Real gains", "Get 1e10 tau", () => currencyR.value > BigNumber.TEN.pow(BigNumber.from(100))); 
-    achievement4 = theory.createAchievement(3, "VentiMochaLatte", "Get 1e20 tau", () => currencyR.value > BigNumber.TEN.pow(BigNumber.from(200))); 
-    achievement5 = theory.createAchievement(4, "Imaginary Limits", "Get 1e50 tau", () => currencyR.value > BigNumber.TEN.pow(BigNumber.from(500))); 
-    achievement6 = theory.createAchievement(5, "Exponential", "Get 1e75 tau", () => currencyR.value > BigNumber.TEN.pow(BigNumber.from(750))); 
+    achievement1 = theory.createAchievement(0, "Publishing papers", "Unlock Publications", () => currencyR.value >= 5e6);
+    achievement2 = theory.createAchievement(1, "Imaginary power", "Buy a level of $a_2$", () => a2.level > 0);
+    achievement3 = theory.createAchievement(2, "An important milestone", "Unlock your first milestone", () => currencyR.value > 1e30); 
+    achievement4 = theory.createAchievement(3, "VentiMochaLatte", "Get 1e20 tau", () => currencyR.value > 1e50); 
+    achievement5 = theory.createAchievement(4, "Super swaps", "Unlock your third milestone", () => currencyR.value > 1e70); 
+    achievement6 = theory.createAchievement(5, "Exponential", "Unlock your forth milestone", () => currencyR.value > 1e100); 
+    achievement7 = theory.createAchievement(6, "Idle at last", "Unlock your fifth milestone", () => currencyR.value > 1e200); 
+    achievement8 = theory.createAchievement(7, "Variable Hell", "Cap $a_1$", () => a1.level >= 2000); 
+    achievement9 = theory.createAchievement(8, "pini", "Reach the end of the theories content", () => currencyR.value > 1e240); 
 
     ///////////////////
     //// Story chapters
