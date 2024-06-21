@@ -234,7 +234,7 @@ var getPrimaryEquation = () => {
 }
 
 var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho^{0.4}";
-var getTertiaryEquation = () => "\\dot{\\rho_1} = " + bonus * rhodotR + ',\\dot{\\rho_2} = ' + bonus * rhodotI;
+var getTertiaryEquation = () => "\\dot{\\rho_r} = " + bonus * rhodotR + ',\\dot{\\rho_i} = ' + bonus * rhodotI;
 var getPublicationMultiplier = (tau) => tau.pow(0.4);
 var getPublicationMultiplierFormula = (symbol) => "{" + symbol + "}^{0.4}";
 var getTau = () => currencyR.value.pow(0.4);
