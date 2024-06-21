@@ -10,7 +10,7 @@ var description =
 ("Work with complex numbers to boost the theory.\n" +
 "Balance increacing rho1 and 2 to maximise gains\n\n" +
 "WIP: 240 / 1500 rho | MS phase complete\n" +
-"Version 1.1.0");
+"Version 1.1.1");
 var authors = "Eylanding";
 var version = 1;
 
