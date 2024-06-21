@@ -28,8 +28,8 @@ var sellC1Timer = 0;
 var rhodotR, rhodotI, dt, bonus;
 
 var init = () => {
-    currencyR = theory.createCurrency();
-    currencyI = theory.createCurrency();
+    currencyR = theory.createCurrency("ρᵣ", "\\rho_r");
+    currencyI = theory.createCurrency("ρᵢ", "\\rho_i");
 
     ///////////////////
     // Regular Upgrades
@@ -226,7 +226,7 @@ var getPrimaryEquation = () => {
     let rhoPart = "\\dot{\\rho} = ";
 
     rhoPart += "\\sum_{n=1}^{4}\\sqrt{c_n^n}";
-    otherPart = "\\rho_1 = a_1" + (a1Exp.level > 0 ? ("^{" + getA1Exponent(a1Exp.level).toString() + "}") : "") + "Re(\\rho), \\rho_2 = a_2 "+ (a2Exp.level > 0 ? ("^{" + getA2Exponent(a2Exp.level).toString() + "}") : "") + " Im(\\rho)"
+    otherPart = "\\rho_r = a_1" + (a1Exp.level > 0 ? ("^{" + getA1Exponent(a1Exp.level).toString() + "}") : "") + "Re(\\rho), \\rho_i = a_2 "+ (a2Exp.level > 0 ? ("^{" + getA2Exponent(a2Exp.level).toString() + "}") : "") + " Im(\\rho)"
     
     theory.primaryEquationHeight = 90;
     return `\\begin{array}{c}${rhoPart}\\\\${otherPart}\\end{array}`;
