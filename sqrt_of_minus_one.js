@@ -7,8 +7,9 @@ import { Utils } from "./api/Utils";
 var id = "sqrt_of_minus_one";
 var name = "The square root of -1";
 var description =
-("Work with complex numbers to boost the theory.\n" +
-"Balance increacing rho1 and 2 to maximise gains\n\n" +
+("What's the square root of a negative number?\n" +
+"This is a theory that plays around with the idea of using complex numbers and multiple currencies. You're going to have to make decisions " +
+"and figure out what to buy, because here the numbers are a little more complex\n\n" +
 "WIP: 240 / 1500 rho | MS phase complete\n" +
 "Version 1.1.2");
 var authors = "Eylanding";
