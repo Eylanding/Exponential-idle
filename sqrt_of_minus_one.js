@@ -223,10 +223,10 @@ var setInternalState = (stateStr) =>
 }
 
 var getPrimaryEquation = () => {
-    let rhoPart = "\\dot{\\rho} = ";
+    let rhoPart = "\\rho = ";
 
     rhoPart += "\\sum_{n=1}^{4}\\sqrt{c_n^n}";
-    otherPart = "\\rho_r = a_1" + (a1Exp.level > 0 ? ("^{" + getA1Exponent(a1Exp.level).toString() + "}") : "") + "Re(\\rho), \\rho_i = a_2 "+ (a2Exp.level > 0 ? ("^{" + getA2Exponent(a2Exp.level).toString() + "}") : "") + " Im(\\rho)"
+    otherPart = "\\dot{\\rho_r} = a_1" + (a1Exp.level > 0 ? ("^{" + getA1Exponent(a1Exp.level).toString() + "}") : "") + "Re(\\rho), \\dot{\\rho_i} = a_2 "+ (a2Exp.level > 0 ? ("^{" + getA2Exponent(a2Exp.level).toString() + "}") : "") + " Im(\\rho)"
     
     theory.primaryEquationHeight = 90;
     return `\\begin{array}{c}${rhoPart}\\\\${otherPart}\\end{array}`;
