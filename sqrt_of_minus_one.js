@@ -246,7 +246,7 @@ var getPrimaryEquation = () => {
 
 }
 
-var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho^{0.4}";
+var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho_r^{0.4}";
 var getTertiaryEquation = () => "\\dot{\\rho_r} = " + bonus * rhodotR + ',\\dot{\\rho_i} = ' + bonus * rhodotI;
 var getPublicationMultiplier = (tau) => 0.5 * tau.pow(0.4);
 var getPublicationMultiplierFormula = (symbol) => "0.5{" + symbol + "}^{0.4}";
