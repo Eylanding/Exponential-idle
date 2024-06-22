@@ -111,7 +111,7 @@ var init = () => {
             if(level == 2) return BigNumber.from(70 * 0.4);
             if(level == 3) return BigNumber.from(100 * 0.4);
             if(level == 4) return BigNumber.from(200 * 0.4);
-            if(level == 5) return BigNumber.from(230 * 0.4);
+            if(level == 5) return BigNumber.from(240 * 0.4);
             return BigNumber.from(-1);
         });
 
