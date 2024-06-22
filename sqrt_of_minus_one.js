@@ -97,14 +97,14 @@ var init = () => {
     theory.createAutoBuyerUpgrade(2, currencyR, 0);
     {
         sellc1 = theory.createPermanentUpgrade(3, currencyI, new FreeCost);
-        sellc1.getDescription = (level) => "Decrease c1 level by 1 (" + (sellc1.level > 0 ? (sellc1.level.toString() + "/ 10") : ("No refund")) + ")";
-        sellc1.getInfo = (_) => "Reduces c1 level by 1 to swap from real to imaginary";
+        sellc1.getDescription = (level) => "Decrease $c_1$ level by 1 (" + (sellc1.level > 0 ? (sellc1.level.toString() + "/ 10") : ("No refund")) + ")";
+        sellc1.getInfo = (_) => "Reduces $c_1$ level by 1 to swap between real and imaginary";
         sellc1.bought = (_) => {if (sellc1.level > 9){sellc1.level = 0; c1.level = c1.level >= 1 ? c1.level - 1 : 0}; sellC1Timer = 0}
     }
     {
         sellc3 = theory.createPermanentUpgrade(4, currencyI, new FreeCost);
-        sellc3.getDescription = (level) => "Decrease c3 level by 1 (" + (sellc3.level > 0 ? (sellc3.level.toString() + "/ 10") : ("No refund")) + ")";
-        sellc3.getInfo = (_) => "Reduces c3 level by 1 to swap from real to imaginary";
+        sellc3.getDescription = (level) => "Decrease $c_3$ level by 1 (" + (sellc3.level > 0 ? (sellc3.level.toString() + "/ 10") : ("No refund")) + ")";
+        sellc3.getInfo = (_) => "Reduces $c_3$ level by 1 to swap between real and imaginary";
         sellc3.bought = (_) => {if (sellc3.level > 9){sellc3.level = 0; c3.level = c3.level >= 1 ? c3.level - 1 : 0}; sellC3Timer = 0}
     }
 
