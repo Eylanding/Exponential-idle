@@ -24,6 +24,7 @@ var achievement1, achievement2, achievement3, achievement4, achievement5, achiev
 var chapter1, chapter2;
 
 var sellC1Timer = 0;
+var sellC3Timer = 0;
 
 var rhodotR, rhodotI, dt, bonus;
 
@@ -100,6 +101,12 @@ var init = () => {
         sellc1.getInfo = (_) => "Reduces c1 level by 1 to swap from real to imaginary";
         sellc1.bought = (_) => {if (sellc1.level > 9){sellc1.level = 0; c1.level = c1.level >= 1 ? c1.level - 1 : 0}; sellC1Timer = 0}
     }
+    {
+        sellc3 = theory.createPermanentUpgrade(4, currencyI, new FreeCost);
+        sellc3.getDescription = (level) => "Decrease c3 level by 1 (" + (sellc3.level > 0 ? (sellc3.level.toString() + "/ 10") : ("No refund")) + ")";
+        sellc3.getInfo = (_) => "Reduces c3 level by 1 to swap from real to imaginary";
+        sellc3.bought = (_) => {if (sellc3.level > 9){sellc3.level = 0; c3.level = c3.level >= 1 ? c3.level - 1 : 0}; sellC3Timer = 0}
+    }
 
     ///////////////////////
     //// Milestone Upgrades
@@ -171,9 +178,14 @@ var tick = (elapsedTime, multiplier) => {
 
     dt = BigNumber.from(elapsedTime * multiplier);
     sellC1Timer += dt
+    sellC3Timer += dt
     if (sellC1Timer > 10) {
         sellC1Timer = -100000
         sellc1.level = 0
+    }
+    if (sellC3Timer > 10) {
+        sellC3Timer = -100000
+        sellc3.level = 0
     }
     bonus = theory.publicationMultiplier;
     rhodotR = 0;
