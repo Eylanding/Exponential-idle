@@ -141,14 +141,14 @@ var init = () => {
 
     /////////////////
     //// Achievements
-    achievement1 = theory.createAchievement(0, "Publishing papers", "Unlock Publications", () => currencyR.value >= 5e6);
-    achievement2 = theory.createAchievement(1, "Imaginary power", "Buy a level of $a_2$", () => a2.level > 0);
-    achievement3 = theory.createAchievement(2, "An important milestone", "Unlock your first milestone", () => currencyR.value > 1e30); 
+    achievement1 = theory.createAchievement(0, "Publishing papers", "Unlock Publications", () => theory.isPublicationAvailable);
+    achievement2 = theory.createAchievement(1, "Imaginary power", "Buy a second level of a₂", () => a2.level > 1);
+    achievement3 = theory.createAchievement(2, "An important milestone", "Unlock your first milestone (1e30)", () => currencyR.value > 1e30); 
     achievement4 = theory.createAchievement(3, "VentiMochaLatte", "Get 1e20 tau", () => currencyR.value > 1e50); 
-    achievement5 = theory.createAchievement(4, "Super swaps", "Unlock your third milestone", () => currencyR.value > 1e70); 
-    achievement6 = theory.createAchievement(5, "Exponential", "Unlock your forth milestone", () => currencyR.value > 1e100); 
-    achievement7 = theory.createAchievement(6, "Idle at last", "Unlock your fifth milestone", () => currencyR.value > 1e200); 
-    achievement8 = theory.createAchievement(7, "Variable Hell", "Cap $a_1$", () => a1.level >= 2000); 
+    achievement5 = theory.createAchievement(4, "Super swaps", "Unlock your third milestone (1e70)", () => currencyR.value > 1e70); 
+    achievement6 = theory.createAchievement(5, "Exponential", "Unlock your forth milestone (1e100)", () => currencyR.value > 1e100); 
+    achievement7 = theory.createAchievement(6, "Idle at last", "Unlock your fifth milestone (1e200)", () => currencyR.value > 1e200); 
+    achievement8 = theory.createAchievement(7, "Variable Hell", "Cap a₁", () => a1.level >= 2000); 
     achievement9 = theory.createAchievement(8, "pini", "Reach the end of the theories content", () => currencyR.value > 1e240); 
 
     ///////////////////
