@@ -6,7 +6,11 @@ import { Utils } from "./api/Utils";
 
 var id = "sqrt_of_minus_one";
 var name = "The square root of -1";
-var description = "Work with complex numbers to boost the theory.\nBalance increacing rho1 and 2 to maximise gains\nWIP\nVersion 1.1.0";
+var description =
+("Work with complex numbers to boost the theory.\n" +
+"Balance increacing rho1 and 2 to maximise gains\n\n" +
+"WIP: 240 / 1500 rho | MS phase complete\n" +
+"Version 1.1.2");
 var authors = "Eylanding";
 var version = 1;
 
@@ -16,16 +20,17 @@ var c1boost, a1Exp, a2Exp;
 const a12expTable = [1, 1.1, 1.15];
 var q;
 
-var achievement1, achievement2, achievement3, achievement4, achievement5, achievement6;
+var achievement1, achievement2, achievement3, achievement4, achievement5, achievement6, achievement7, achievement8, achievement9;
 var chapter1, chapter2;
 
 var sellC1Timer = 0;
+var sellC3Timer = 0;
 
 var rhodotR, rhodotI, dt, bonus;
 
 var init = () => {
-    currencyR = theory.createCurrency();
-    currencyI = theory.createCurrency();
+    currencyR = theory.createCurrency("ρᵣ", "\\rho_r");
+    currencyI = theory.createCurrency("ρᵢ", "\\rho_i");
 
     ///////////////////
     // Regular Upgrades
@@ -34,7 +39,7 @@ var init = () => {
     {
         let getDesc = (level) => "a_1=" + getA1(level) + "";
         let getInfo = (level) => "a_1=" + getA1(level).toString(0);
-        a1 = theory.createUpgrade(0, currencyI, new FirstFreeCost(new ExponentialCost(5, Math.log2(1.26))));
+        a1 = theory.createUpgrade(0, currencyI, new FirstFreeCost(new ExponentialCost(10, Math.log2(1.26))));
         a1.getDescription = (_) => Utils.getMath(getDesc(a1.level));
         a1.getInfo = (amount) => Utils.getMathTo(getInfo(a1.level), getInfo(a1.level + amount));
         a1.maxLevel = 2000
@@ -44,7 +49,7 @@ var init = () => {
     {
         let getDesc = (level) => "a_2=" + getA2(level) + "";
         let getInfo = (level) => "a_2=" + getA2(level).toString(0);
-        a2 = theory.createUpgrade(1, currencyR, new FirstFreeCost(new ExponentialCost(10000000000, Math.log2(1.5))));
+        a2 = theory.createUpgrade(1, currencyR, new FirstFreeCost(new ExponentialCost(10**10, Math.log2(1.48))));
         a2.getDescription = (_) => Utils.getMath(getDesc(a2.level));
         a2.getInfo = (amount) => Utils.getMathTo(getInfo(a2.level), getInfo(a2.level + amount));
     }
@@ -80,7 +85,7 @@ var init = () => {
     {
         let getDesc = (level) => "c_4=(-2)^{" + level + "}";
         let getInfo = (level) => "\\sqrt{c_4^{4}}=" + getC4(level).pow(2).toString(0);
-        c4 = theory.createUpgrade(5, currencyI, new ExponentialCost(5000, Math.log2(9.5)));
+        c4 = theory.createUpgrade(5, currencyI, new ExponentialCost(10**6, Math.log2(9.5)));
         c4.getDescription = (_) => Utils.getMath(getDesc(c4.level));
         c4.getInfo = (amount) => Utils.getMathTo(getInfo(c4.level), getInfo(c4.level + amount));
     }
@@ -92,9 +97,15 @@ var init = () => {
     theory.createAutoBuyerUpgrade(2, currencyR, 0);
     {
         sellc1 = theory.createPermanentUpgrade(3, currencyI, new FreeCost);
-        sellc1.getDescription = (level) => "Decrease c1 level by 1 (" + (sellc1.level > 0 ? (sellc1.level.toString() + "/ 10") : ("No refund")) + ")";
-        sellc1.getInfo = (_) => "Reduces c1 level by 1 to swap from real to imaginary";
+        sellc1.getDescription = (level) => "Decrease $c_1$ level by 1 (" + (sellc1.level > 0 ? (sellc1.level.toString() + "/ 10") : ("No refund")) + ")";
+        sellc1.getInfo = (_) => "Reduces $c_1$ level by 1 to swap between real and imaginary";
         sellc1.bought = (_) => {if (sellc1.level > 9){sellc1.level = 0; c1.level = c1.level >= 1 ? c1.level - 1 : 0}; sellC1Timer = 0}
+    }
+    {
+        sellc3 = theory.createPermanentUpgrade(4, currencyI, new FreeCost);
+        sellc3.getDescription = (level) => "Decrease $c_3$ level by 1 (" + (sellc3.level > 0 ? (sellc3.level.toString() + "/ 10") : ("No refund")) + ")";
+        sellc3.getInfo = (_) => "Reduces $c_3$ level by 1 to swap between real and imaginary";
+        sellc3.bought = (_) => {if (sellc3.level > 9){sellc3.level = 0; c3.level = c3.level >= 1 ? c3.level - 1 : 0}; sellC3Timer = 0}
     }
 
     ///////////////////////
@@ -107,7 +118,7 @@ var init = () => {
             if(level == 2) return BigNumber.from(70 * 0.4);
             if(level == 3) return BigNumber.from(100 * 0.4);
             if(level == 4) return BigNumber.from(200 * 0.4);
-            if(level == 5) return BigNumber.from(230 * 0.4);
+            if(level == 5) return BigNumber.from(240 * 0.4);
             return BigNumber.from(-1);
         });
 
@@ -137,12 +148,15 @@ var init = () => {
 
     /////////////////
     //// Achievements
-    achievement1 = theory.createAchievement(0, "Not quite exponential", "Get 10 tau", () => currencyR.value > BigNumber.TEN.pow(BigNumber.from(10)));
-    achievement2 = theory.createAchievement(1, "Getting there", "Get 1e5 tau", () => currencyR.value > BigNumber.TEN.pow(BigNumber.from(50)));
-    achievement3 = theory.createAchievement(2, "Real gains", "Get 1e10 tau", () => currencyR.value > BigNumber.TEN.pow(BigNumber.from(100))); 
-    achievement4 = theory.createAchievement(3, "VentiMochaLatte", "Get 1e20 tau", () => currencyR.value > BigNumber.TEN.pow(BigNumber.from(200))); 
-    achievement5 = theory.createAchievement(4, "Imaginary Limits", "Get 1e50 tau", () => currencyR.value > BigNumber.TEN.pow(BigNumber.from(500))); 
-    achievement6 = theory.createAchievement(5, "Exponential", "Get 1e75 tau", () => currencyR.value > BigNumber.TEN.pow(BigNumber.from(750))); 
+    achievement1 = theory.createAchievement(0, "Publishing papers", "Unlock Publications", () => theory.isPublicationAvailable);
+    achievement2 = theory.createAchievement(1, "Imaginary power", "Buy a second level of a₂", () => a2.level > 1);
+    achievement3 = theory.createAchievement(2, "An important milestone", "Unlock your first milestone (1e30)", () => currencyR.value > 1e30); 
+    achievement4 = theory.createAchievement(3, "VentiMochaLatte", "Get 1e20 tau", () => currencyR.value > 1e50); 
+    achievement5 = theory.createAchievement(4, "Super swaps", "Unlock your third milestone (1e70)", () => currencyR.value > 1e70); 
+    achievement6 = theory.createAchievement(5, "Exponential", "Unlock your forth milestone (1e100)", () => currencyR.value > 1e100); 
+    achievement7 = theory.createAchievement(6, "Idle at last", "Unlock your fifth milestone (1e200)", () => currencyR.value > 1e200); 
+    achievement8 = theory.createAchievement(7, "Variable Hell", "Cap a₁", () => a1.level >= 2000); 
+    achievement9 = theory.createAchievement(8, "pini", "Reach the end of the theories content (1e240)", () => currencyR.value > 1e240); 
 
     ///////////////////
     //// Story chapters
@@ -164,9 +178,14 @@ var tick = (elapsedTime, multiplier) => {
 
     dt = BigNumber.from(elapsedTime * multiplier);
     sellC1Timer += dt
+    sellC3Timer += dt
     if (sellC1Timer > 10) {
         sellC1Timer = -100000
         sellc1.level = 0
+    }
+    if (sellC3Timer > 10) {
+        sellC3Timer = -100000
+        sellc3.level = 0
     }
     bonus = theory.publicationMultiplier;
     rhodotR = 0;
@@ -216,10 +235,10 @@ var setInternalState = (stateStr) =>
 }
 
 var getPrimaryEquation = () => {
-    let rhoPart = "\\dot{\\rho} = ";
+    let rhoPart = "\\rho = ";
 
     rhoPart += "\\sum_{n=1}^{4}\\sqrt{c_n^n}";
-    otherPart = "\\rho_1 = a_1" + (a1Exp.level > 0 ? ("^{" + getA1Exponent(a1Exp.level).toString() + "}") : "") + "Re(\\rho), \\rho_2 = a_2 "+ (a2Exp.level > 0 ? ("^{" + getA2Exponent(a2Exp.level).toString() + "}") : "") + " Im(\\rho)"
+    otherPart = "\\dot{\\rho_r} = a_1" + (a1Exp.level > 0 ? ("^{" + getA1Exponent(a1Exp.level).toString() + "}") : "") + "Re(\\rho), \\dot{\\rho_i} = a_2 "+ (a2Exp.level > 0 ? ("^{" + getA2Exponent(a2Exp.level).toString() + "}") : "") + " Im(\\rho)"
     
     theory.primaryEquationHeight = 90;
     return `\\begin{array}{c}${rhoPart}\\\\${otherPart}\\end{array}`;
@@ -227,9 +246,9 @@ var getPrimaryEquation = () => {
 }
 
 var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho^{0.4}";
-var getTertiaryEquation = () => "\\dot{\\rho_1} = " + bonus * rhodotR + ',\\dot{\\rho_2} = ' + bonus * rhodotI;
-var getPublicationMultiplier = (tau) => tau.pow(0.4);
-var getPublicationMultiplierFormula = (symbol) => "{" + symbol + "}^{0.4}";
+var getTertiaryEquation = () => "\\dot{\\rho_r} = " + bonus * rhodotR + ',\\dot{\\rho_i} = ' + bonus * rhodotI;
+var getPublicationMultiplier = (tau) => 0.5 * tau.pow(0.4);
+var getPublicationMultiplierFormula = (symbol) => "0.5{" + symbol + "}^{0.4}";
 var getTau = () => currencyR.value.pow(0.4);
 var get2DGraphValue = () => currencyR.value.sign * (BigNumber.ONE + currencyR.value.abs()).log10().toNumber();
 var getCurrencyFromTau  = (tau) => [tau.pow(1/0.4), currencyR.symbol]
