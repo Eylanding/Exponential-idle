@@ -149,7 +149,7 @@ var init = () => {
     achievement6 = theory.createAchievement(5, "Exponential", "Unlock your forth milestone (1e100)", () => currencyR.value > 1e100); 
     achievement7 = theory.createAchievement(6, "Idle at last", "Unlock your fifth milestone (1e200)", () => currencyR.value > 1e200); 
     achievement8 = theory.createAchievement(7, "Variable Hell", "Cap a₁", () => a1.level >= 2000); 
-    achievement9 = theory.createAchievement(8, "pini", "Reach the end of the theories content", () => currencyR.value > 1e240); 
+    achievement9 = theory.createAchievement(8, "pini", "Reach the end of the theories content (1e240)", () => currencyR.value > 1e240); 
 
     ///////////////////
     //// Story chapters
