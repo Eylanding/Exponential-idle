@@ -10,7 +10,7 @@ var description =
 ("What's the square root of a negative number?\n" +
 "This is a theory that plays around with the idea of using complex numbers and multiple currencies. You're going to have to make decisions " +
 "and figure out what to buy, because here the numbers are a little more complex\n\n" +
-"WIP: 240 / 1500 rho | MS phase complete\n" +
+"WIP: 240 / 1500 rho | Next: q\n" +
 "Version 1.1.2");
 var authors = "Eylanding";
 var version = 1;
