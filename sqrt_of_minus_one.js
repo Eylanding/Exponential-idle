@@ -18,7 +18,7 @@ var version = 1;
 var currencyR, currencyI;
 var a1, a2, c1, c2, c3, c4;
 var c1boost, a1Exp, a2Exp;
-const a12expTable = [1, 1.1, 1.15];
+const a12expTable = [1, 1.05, 1.1];
 var q;
 
 var achievement1, achievement2, achievement3, achievement4, achievement5, achievement6, achievement7, achievement8, achievement9;
@@ -248,8 +248,8 @@ var getPrimaryEquation = () => {
 
 var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho_r^{0.4}";
 var getTertiaryEquation = () => "\\dot{\\rho_r} = " + bonus * rhodotR + ',\\dot{\\rho_i} = ' + bonus * rhodotI;
-var getPublicationMultiplier = (tau) => 0.5 * tau.pow(0.4);
-var getPublicationMultiplierFormula = (symbol) => "0.5{" + symbol + "}^{0.4}";
+var getPublicationMultiplier = (tau) => 0.5 * tau.pow(0.691);
+var getPublicationMultiplierFormula = (symbol) => "0.5{" + symbol + "}^{0.691}";
 var getTau = () => currencyR.value.pow(0.4);
 var get2DGraphValue = () => currencyR.value.sign * (BigNumber.ONE + currencyR.value.abs()).log10().toNumber();
 var getCurrencyFromTau  = (tau) => [tau.pow(1/0.4), currencyR.symbol]
