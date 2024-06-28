@@ -108,6 +108,18 @@ var init = () => {
         sellc3.getInfo = (_) => "Reduces $c_3$ level by 1 to swap between real and imaginary";
         sellc3.bought = (_) => {if (sellc3.level > 2){sellc3.level = 0; c3.level = c3.level >= 1 ? c3.level - 1 : 0}; sellC3Timer = 0}
     }
+    /* Free penny
+    For testing purposes
+    What I didn't commit any thievery what're you talking about
+    */
+    {
+        let warpFive = theory.createPermanentUpgrade(9001, currencyR,
+        new FreeCost);
+        warpFive.description = 'Get 5 penny for free';
+        warpFive.info = 'Yields 5 penny';
+        warpFive.bought = (_) => currencyR.value = BigNumber.from(1e5) *
+        (BigNumber.ONE + currencyR.value);
+    }
 
     ///////////////////////
     //// Milestone Upgrades
