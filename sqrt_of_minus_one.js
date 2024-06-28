@@ -11,7 +11,7 @@ var description =
 "This is a theory that plays around with the idea of using complex numbers and multiple currencies. You're going to have to make decisions " +
 "and figure out what to buy, because here the numbers are a little more complex\n\n" +
 "WIP: 240 / 1500 rho | Next: q\n" +
-"Version 1.1.2");
+"Version 1.1.3");
 var authors = "Eylanding";
 var version = 1;
 
