@@ -18,7 +18,7 @@ var version = 1;
 var currencyR, currencyI;
 var a1, a2, c1, c2, c3, c4;
 var c1boost, a1Exp, a2Exp;
-const a12expTable = [1, 1.1, 1.15];
+const a12expTable = [1, 1.05, 1.1];
 var q;
 
 var achievement1, achievement2, achievement3, achievement4, achievement5, achievement6, achievement7, achievement8, achievement9;
@@ -107,6 +107,18 @@ var init = () => {
         sellc3.getDescription = (level) => "Decrease $c_3$ level by 1 (" + (sellc3.level > 0 ? (sellc3.level.toString() + "/ 3") : ("No refund")) + ")";
         sellc3.getInfo = (_) => "Reduces $c_3$ level by 1 to swap between real and imaginary";
         sellc3.bought = (_) => {if (sellc3.level > 2){sellc3.level = 0; c3.level = c3.level >= 1 ? c3.level - 1 : 0}; sellC3Timer = 0}
+    }
+    /* Free penny
+    For testing purposes
+    What I didn't commit any thievery what're you talking about
+    */
+    {
+        let warpFive = theory.createPermanentUpgrade(9001, currencyR,
+        new FreeCost);
+        warpFive.description = 'Get 5 penny for free';
+        warpFive.info = 'Yields 5 penny';
+        warpFive.bought = (_) => currencyR.value = BigNumber.from(1e5) *
+        (BigNumber.ONE + currencyR.value);
     }
 
     ///////////////////////
@@ -248,8 +260,8 @@ var getPrimaryEquation = () => {
 
 var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho_r^{0.4}";
 var getTertiaryEquation = () => "\\dot{\\rho_r} = " + bonus * rhodotR + ',\\dot{\\rho_i} = ' + bonus * rhodotI;
-var getPublicationMultiplier = (tau) => 0.5 * tau.pow(0.4);
-var getPublicationMultiplierFormula = (symbol) => "0.5{" + symbol + "}^{0.4}";
+var getPublicationMultiplier = (tau) => 0.5 * tau.pow(0.43);
+var getPublicationMultiplierFormula = (symbol) => "0.5{" + symbol + "}^{0.43}";
 var getTau = () => currencyR.value.pow(0.4);
 var get2DGraphValue = () => currencyR.value.sign * (BigNumber.ONE + currencyR.value.abs()).log10().toNumber();
 var getCurrencyFromTau  = (tau) => [tau.pow(1/0.4), currencyR.symbol]
