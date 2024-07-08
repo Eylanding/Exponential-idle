@@ -168,6 +168,13 @@ var init = () => {
         a2Exp.boughtOrRefunded = (_) => theory.invalidatePrimaryEquation();
     }
 
+    {
+        qUnlock = theory.createMilestoneUpgrade(3, 1);
+        qUnlock.getDescription = (amount) => Localization.getUpgradeUnlockDesc("q");
+        qUnlock.getInfo = (amount) => Localization.getUpgradeUnlockInfo("q");
+        qUnlock.boughtOrRefunded = (_) => theory.invalidatePrimaryEquation();
+    }
+
     /////////////////
     //// Achievements
     achievement1 = theory.createAchievement(0, "Publishing papers", "Unlock Publications", () => theory.isPublicationAvailable);
