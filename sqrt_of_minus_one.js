@@ -16,7 +16,7 @@ var authors = "Eylanding";
 var version = 1;
 
 var currencyR, currencyI;
-var a1, a2, c1, c2, c3, c4;
+var a1, a2, c1, c2, c3, c4, q1;
 var c1boost, a1Exp, a2Exp;
 const a12expTable = [1, 1.05, 1.1];
 var q;
@@ -89,6 +89,15 @@ var init = () => {
         c4 = theory.createUpgrade(5, currencyI, new ExponentialCost(10**6, Math.log2(9.5)));
         c4.getDescription = (_) => Utils.getMath(getDesc(c4.level));
         c4.getInfo = (amount) => Utils.getMathTo(getInfo(c4.level), getInfo(c4.level + amount));
+    }
+
+    // q1
+    {
+        let getDesc = (level) => "q1=" + getQ1(level) + "";
+        let getInfo = (level) => "q1=" + getC4(level).toString();
+        q1 = theory.createUpgrade(5, currencyI, new ExponentialCost(10**6, Math.log2(9.5)));
+        q1.getDescription = (_) => Utils.getMath(getDesc(q1.level));
+        q1.getInfo = (amount) => Utils.getMathTo(getInfo(q1.level), getInfo(q1.level + amount));
     }
 
     /////////////////////
@@ -272,6 +281,7 @@ var getC1 = (level) => BigNumber.TWO.pow(level) * (c1buff.level >= 1 ? 200 : 1)
 var getC2 = (level) => BigNumber.TWO.pow(level)
 var getC3 = (level) => BigNumber.TWO.pow(level)
 var getC4 = (level) => BigNumber.TWO.pow(level)
+var getQ1 = (level) => Utils.getStepwisePowerSum(level, 2, 10, 0);
 var getA1Exponent = (level) => BigNumber.from(a12expTable[level]);
 var getA2Exponent = (level) => BigNumber.from(a12expTable[level]);
 
