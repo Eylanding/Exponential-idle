@@ -185,7 +185,9 @@ var init = () => {
         qUnlock = theory.createMilestoneUpgrade(3, 1);
         qUnlock.getDescription = (amount) => Localization.getUpgradeUnlockDesc("q");
         qUnlock.getInfo = (amount) => Localization.getUpgradeUnlockInfo("q");
-        qUnlock.boughtOrRefunded = (_) => theory.invalidatePrimaryEquation();
+        qUnlock.boughtOrRefunded = (_) => {
+            updateAvailability();
+            theory.invalidatePrimaryEquation();}
     }
 
     /////////////////
@@ -214,6 +216,7 @@ var init = () => {
 var updateAvailability = () => {
     a1Exp.isAvailable = c1buff.level >= 1
     a2Exp.isAvailable = c1buff.level >= 1
+    q1.isAvailable = qUnlock.level > 0
 }
 
 var tick = (elapsedTime, multiplier) => {
