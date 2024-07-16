@@ -267,6 +267,8 @@ var tick = (elapsedTime, multiplier) => {
 var postPublish = () =>
 {
     pubTime = 0;
+    qR = 1;
+    qI = 0;
     theory.invalidatePrimaryEquation();
     theory.invalidateSecondaryEquation();
     theory.invalidateTertiaryEquation();
