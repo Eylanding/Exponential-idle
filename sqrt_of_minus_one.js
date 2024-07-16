@@ -17,9 +17,10 @@ var version = 1;
 
 var currencyR, currencyI;
 var a1, a2, c1, c2, c3, c4, q1;
-var c1boost, a1Exp, a2Exp;
+var c1boost, a1Exp, a2Exp, qUnlock;
 const a12expTable = [1, 1.05, 1.1];
-var q;
+var qR = 1;
+var qI = 0;
 
 var achievement1, achievement2, achievement3, achievement4, achievement5, achievement6, achievement7, achievement8, achievement9;
 var chapter1, chapter2;
