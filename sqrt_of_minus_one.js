@@ -251,6 +251,13 @@ var tick = (elapsedTime, multiplier) => {
         rhodotR += getA1(a1.level).pow(getA1Exponent(a1Exp.level)) * (getC3(c3.level).pow(BigNumber.THREE).sqrt() + getC4(c4.level).pow(BigNumber.TWO));
     }
 
+    if (qUnlock.level > 0){
+        qR += getQ1(q1.level) * getC2(c2.level).pow(0.1)
+
+        rhodotR = rhodotR*qR - rhodotI*qI
+        rhodotI = rhodotI*qR + rhodotR*qI
+    }
+
     currencyR.value += dt * bonus * rhodotR;
     currencyI.value += dt * bonus * rhodotI;
 
