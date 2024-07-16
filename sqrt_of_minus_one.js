@@ -29,6 +29,19 @@ var sellC3Timer = 0;
 
 var rhodotR, rhodotI, dt, bonus;
 
+var render = (value) => {
+    if (value > 0.1){
+        return value.toString
+    }
+    exponent = 0
+    while (value < 1){
+        value *= 10
+        exponent -= 1
+    }
+    return value.toString() + "e" + exponent.toString()
+    
+}
+
 var init = () => {
     currencyR = theory.createCurrency("ρᵣ", "\\rho_r");
     currencyI = theory.createCurrency("ρᵢ", "\\rho_i");
