@@ -292,6 +292,7 @@ var setInternalState = (stateStr) =>
 var getPrimaryEquation = () => {
     let rhoPart = "\\rho = ";
 
+    rhoPart += qUnlock.level > 0 ?  "q" : ""
     rhoPart += "\\sum_{n=1}^{4}\\sqrt{c_n^n}";
     otherPart = "\\dot{\\rho_r} = a_1" + (a1Exp.level > 0 ? ("^{" + getA1Exponent(a1Exp.level).toString() + "}") : "") + "Re(\\rho), \\dot{\\rho_i} = a_2 "+ (a2Exp.level > 0 ? ("^{" + getA2Exponent(a2Exp.level).toString() + "}") : "") + " Im(\\rho)"
     
@@ -301,7 +302,7 @@ var getPrimaryEquation = () => {
 }
 
 var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho_r^{0.4}";
-var getTertiaryEquation = () => "\\dot{\\rho_r} = " + bonus * rhodotR + ',\\dot{\\rho_i} = ' + bonus * rhodotI;
+var getTertiaryEquation = () => "\\dot{\\rho_r} = " + bonus * rhodotR + ',\\dot{\\rho_i} = ' + bonus * rhodotI + (qUnlock.level > 0 ? (',q = ' + qR + "+" + qI + "i") : "");
 var getPublicationMultiplier = (tau) => 0.5 * tau.pow(0.43);
 var getPublicationMultiplierFormula = (symbol) => "0.5{" + symbol + "}^{0.43}";
 var getTau = () => currencyR.value.pow(0.4);
