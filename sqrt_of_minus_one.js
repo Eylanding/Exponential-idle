@@ -106,9 +106,9 @@ var init = () => {
 
     // q1
     {
-        let getDesc = (level) => "q_1=" + getQ1(level) + "";
-        let getInfo = (level) => "q_1=" + getC4(level).toString();
-        q1 = theory.createUpgrade(6, currencyI, new ExponentialCost(10**6, Math.log2(9.5)));
+        let getDesc = (level) => "q_1=" + render(getQ1(level));
+        let getInfo = (level) => "q_1=" + render(getQ1(level));
+        q1 = theory.createUpgrade(6, currencyI, new ExponentialCost(10**210, Math.log2(5)));
         q1.getDescription = (_) => Utils.getMath(getDesc(q1.level));
         q1.getInfo = (amount) => Utils.getMathTo(getInfo(q1.level), getInfo(q1.level + amount));
     }
@@ -301,7 +301,7 @@ var getC1 = (level) => BigNumber.TWO.pow(level) * (c1buff.level >= 1 ? 200 : 1)
 var getC2 = (level) => BigNumber.TWO.pow(level)
 var getC3 = (level) => BigNumber.TWO.pow(level)
 var getC4 = (level) => BigNumber.TWO.pow(level)
-var getQ1 = (level) => Utils.getStepwisePowerSum(level, 2, 10, 0);
+var getQ1 = (level) => Utils.getStepwisePowerSum(level, 2, 10, 0)/1000;
 var getA1Exponent = (level) => BigNumber.from(a12expTable[level]);
 var getA2Exponent = (level) => BigNumber.from(a12expTable[level]);
 
