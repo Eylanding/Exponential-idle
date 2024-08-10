@@ -19,8 +19,8 @@ var currencyR, currencyI;
 var a1, a2, c1, c2, c3, c4, q1;
 var c1boost, a1Exp, a2Exp, qUnlock;
 const a12expTable = [1, 1.05, 1.1];
-var qR = 1;
-var qI = 0;
+var qR = BigNumber.ONE;
+var qI = BigNumber.ZERO;
 
 var achievement1, achievement2, achievement3, achievement4, achievement5, achievement6, achievement7, achievement8, achievement9;
 var chapter1, chapter2;
@@ -31,15 +31,18 @@ var sellC3Timer = 0;
 var rhodotR, rhodotI, dt, bonus;
 
 var render = (value) => {
+    if (value == 0){
+        return 0
+    }
     if (value > 0.1){
-        return value.toString
+        return value.toString()
     }
     exponent = 0
     while (value < 1){
         value *= 10
         exponent -= 1
     }
-    return value.toString() + "e" + exponent.toString()
+    return (value.toString() + "e" + exponent.toString())
     
 }
 
@@ -211,6 +214,9 @@ var init = () => {
     //() => a1.level > 0);
     //chapter2 = theory.createStoryChapter(1, "My Second Chapter", "This is line 1 again,\nand this is line 2... again.\n\nNice again.", () => c2.level > 0);
 
+    qR = BigNumber.ONE
+    qI = BigNumber.ZERO
+
     updateAvailability();
 }
 
@@ -251,11 +257,14 @@ var tick = (elapsedTime, multiplier) => {
         rhodotR += getA1(a1.level).pow(getA1Exponent(a1Exp.level)) * (getC3(c3.level).pow(BigNumber.THREE).sqrt() + getC4(c4.level).pow(BigNumber.TWO));
     }
 
-    if (qUnlock.level > 0){
-        qR += getQ1(q1.level) * getC2(c2.level).pow(0.1)
+    if (qUnlock.level > 0 && q1.level > 0){
+        qTot = (qR.pow(2) + qI.pow(2)).pow(0.5)
+        qR += getQ1(q1.level) * (getC2(c2.level).pow(0.02) + getC1(c1.level).pow(0.01) * (c1.level % 2 === 0 ? 1 : 0.09876)) / qTot
+        qI += getQ1(q1.level) * (getC1(c1.level).pow(0.01) * (c1.level % 2 === 0 ? 0 : 0.15643)) / qTot
 
+        temp = rhodotR
         rhodotR = rhodotR*qR - rhodotI*qI
-        rhodotI = rhodotI*qR + rhodotR*qI
+        rhodotI = rhodotI*qR + temp*qI
     }
 
     currencyR.value += dt * bonus * rhodotR;
@@ -301,7 +310,7 @@ var getPrimaryEquation = () => {
 
 }
 
-var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho_r^{0.4}";
+var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho_r^{0.4}, \\dot{q} = q_1[-c_1^{0.01}+(c_2^2)^{0.01}]";
 var getTertiaryEquation = () => "\\dot{\\rho_r} = " + bonus * rhodotR + ',\\dot{\\rho_i} = ' + bonus * rhodotI + (qUnlock.level > 0 ? (',q = ' + qR + "+" + qI + "i") : "");
 var getPublicationMultiplier = (tau) => 0.5 * tau.pow(0.43);
 var getPublicationMultiplierFormula = (symbol) => "0.5{" + symbol + "}^{0.43}";
@@ -315,7 +324,7 @@ var getC1 = (level) => BigNumber.TWO.pow(level) * (c1buff.level >= 1 ? 200 : 1)
 var getC2 = (level) => BigNumber.TWO.pow(level)
 var getC3 = (level) => BigNumber.TWO.pow(level)
 var getC4 = (level) => BigNumber.TWO.pow(level)
-var getQ1 = (level) => Utils.getStepwisePowerSum(level, 2, 10, 0)/1000;
+var getQ1 = (level) => Utils.getStepwisePowerSum(level, 2, 10, 0)/1e5;
 var getA1Exponent = (level) => BigNumber.from(a12expTable[level]);
 var getA2Exponent = (level) => BigNumber.from(a12expTable[level]);
 
