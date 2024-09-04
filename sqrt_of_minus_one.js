@@ -175,14 +175,22 @@ var init = () => {
         a1Exp = theory.createMilestoneUpgrade(1, 2);
         a1Exp.getDescription = (amount) => Localization.getUpgradeIncCustomExpDesc("a_1", Math.round((a12expTable[a1Exp.level + amount] - a12expTable[a1Exp.level] || 0) * 100) / 100);
         a1Exp.getInfo = (amount) => Localization.getUpgradeIncCustomExpInfo("a_1", Math.round((a12expTable[a1Exp.level + amount] - a12expTable[a1Exp.level] || 0) * 100) / 100);
-        a1Exp.boughtOrRefunded = (_) => theory.invalidatePrimaryEquation();
+        a1Exp.boughtOrRefunded = (_) => {
+            updateAvailability();
+            theory.invalidatePrimaryEquation();
+        }
+        a1Exp.canBeRefunded = () => (qUnlock.level == 0)
     }
 
     {
         a2Exp = theory.createMilestoneUpgrade(2, 2);
         a2Exp.getDescription = (amount) => Localization.getUpgradeIncCustomExpDesc("a_2", Math.round((a12expTable[a2Exp.level + amount] - a12expTable[a2Exp.level] || 0) * 100) / 100);
         a2Exp.getInfo = (amount) => Localization.getUpgradeIncCustomExpInfo("a_2", Math.round((a12expTable[a2Exp.level + amount] - a12expTable[a2Exp.level] || 0) * 100) / 100);
-        a2Exp.boughtOrRefunded = (_) => theory.invalidatePrimaryEquation();
+        a2Exp.boughtOrRefunded = (_) => {
+            updateAvailability();
+            theory.invalidatePrimaryEquation();
+        }
+        a2Exp.canBeRefunded = () => (qUnlock.level == 0)
     }
 
     {
@@ -223,6 +231,7 @@ var init = () => {
 var updateAvailability = () => {
     a1Exp.isAvailable = c1buff.level >= 1
     a2Exp.isAvailable = c1buff.level >= 1
+    qUnlock.isAvailable = (a1Exp.level >= 2) && (a2Exp.level >= 2)
     q1.isAvailable = qUnlock.level > 0
 }
 
@@ -258,12 +267,16 @@ var tick = (elapsedTime, multiplier) => {
     }
 
     if (qUnlock.level > 0 && q1.level > 0){
-        qTot = (qR.pow(2) + qI.pow(2)).pow(0.5)
+        log("qR: " + qR.toString() + ", qI: " +  qI.toString())
+        qTot = Math.max((qR.pow(2) + qI.pow(2)).pow(0.5), 1)
         qR += getQ1(q1.level) * (getC2(c2.level).pow(0.02) + getC1(c1.level).pow(0.01) * (c1.level % 2 === 0 ? 1 : 0.09876)) / qTot
         qI += getQ1(q1.level) * (getC1(c1.level).pow(0.01) * (c1.level % 2 === 0 ? 0 : 0.15643)) / qTot
 
         temp = rhodotR
         rhodotR = rhodotR*qR - rhodotI*qI
+        if (rhodotR < 0) {
+            rhodotR = 0
+        }
         rhodotI = rhodotI*qR + temp*qI
     }
 
@@ -276,8 +289,8 @@ var tick = (elapsedTime, multiplier) => {
 var postPublish = () =>
 {
     pubTime = 0;
-    qR = 1;
-    qI = 0;
+    qR = BigNumber.ONE;
+    qI = BigNumber.ZERO;
     theory.invalidatePrimaryEquation();
     theory.invalidateSecondaryEquation();
     theory.invalidateTertiaryEquation();
