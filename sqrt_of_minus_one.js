@@ -1,4 +1,4 @@
-import { ExponentialCost, FreeCost, LinearCost } from "./api/Costs";
+import { CustomCost, ExponentialCost, FreeCost, LinearCost } from "./api/Costs";
 import { Localization } from "./api/Localization";
 import { BigNumber } from "./api/BigNumber";
 import { theory } from "./api/Theory";
@@ -76,7 +76,11 @@ var init = () => {
     {
         let getDesc = (level) => "c_1="+ (c1buff.level >= 1 ? "200\\times" : "") +"(-2)^{" + level + "}";
         let getInfo = (level) => "\\sqrt{c_1}=" + getC1(level).pow(0.5).toString(0) + ((level % 2 == 1) ? 'i' : '');
-        c1 = theory.createUpgrade(2, currencyR, new ExponentialCost(10, Math.log2(1.95)));
+        c1 = theory.createUpgrade(2, currencyR, new CustomCost((level) => {
+            if (level < 600) {return BigNumber.from(1.95).pow(level) * BigNumber.TEN};
+            return BigNumber.from(100).pow(level - 600) * BigNumber.from(1.95).pow(675) * BigNumber.TEN;
+        })); //10 * 1.95 ^ L
+        //c1 = theory.createUpgrade(2, currencyR, new FreeCost());
         c1.getDescription = (_) => Utils.getMath(getDesc(c1.level));
         c1.getInfo = (amount) => Utils.getMathTo(getInfo(c1.level), getInfo(c1.level + amount));
     }
@@ -267,7 +271,7 @@ var tick = (elapsedTime, multiplier) => {
     }
 
     if (qUnlock.level > 0 && q1.level > 0){
-        log("qR: " + qR.toString() + ", qI: " +  qI.toString())
+        //log("qR: " + qR.toString() + ", qI: " +  qI.toString())
         qTot = Math.max((qR.pow(2) + qI.pow(2)).pow(0.5), 1)
         qR += getQ1(q1.level) * (getC2(c2.level).pow(0.02) + getC1(c1.level).pow(0.01) * (c1.level % 2 === 0 ? 1 : 0.09876)) / qTot
         qI += getQ1(q1.level) * (getC1(c1.level).pow(0.01) * (c1.level % 2 === 0 ? 0 : 0.15643)) / qTot
@@ -337,7 +341,7 @@ var getC1 = (level) => BigNumber.TWO.pow(level) * (c1buff.level >= 1 ? 200 : 1)
 var getC2 = (level) => BigNumber.TWO.pow(level)
 var getC3 = (level) => BigNumber.TWO.pow(level)
 var getC4 = (level) => BigNumber.TWO.pow(level)
-var getQ1 = (level) => Utils.getStepwisePowerSum(level, 2, 10, 0)/1e5;
+var getQ1 = (level) => Utils.getStepwisePowerSum(level, 2, 10, 0)/1e10;
 var getA1Exponent = (level) => BigNumber.from(a12expTable[level]);
 var getA2Exponent = (level) => BigNumber.from(a12expTable[level]);
 
