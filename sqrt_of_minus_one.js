@@ -78,7 +78,7 @@ var init = () => {
         let getInfo = (level) => "\\sqrt{c_1}=" + getC1(level).pow(0.5).toString(0) + ((level % 2 == 1) ? 'i' : '');
         c1 = theory.createUpgrade(2, currencyR, new CustomCost((level) => {
             if (level < 550) {return BigNumber.from(1.95).pow(level) * BigNumber.TEN};
-            return BigNumber.from(100).pow(level - 550) * BigNumber.from(1.95).pow(550) * BigNumber.TEN;
+            return BigNumber.from(100).pow(level - 550) * BigNumber.from(1.95).pow(550) * BigNumber.from(12);
         })); //10 * 1.95 ^ L
         //c1 = theory.createUpgrade(2, currencyR, new FreeCost());
         c1.getDescription = (_) => Utils.getMath(getDesc(c1.level));
@@ -116,7 +116,7 @@ var init = () => {
     {
         let getDesc = (level) => "q_1=" + render(getQ1(level));
         let getInfo = (level) => "q_1=" + render(getQ1(level));
-        q1 = theory.createUpgrade(6, currencyI, new ExponentialCost(10**210, Math.log2(5)));
+        q1 = theory.createUpgrade(6, currencyI, new ExponentialCost(10**210, Math.log2(15)));
         q1.getDescription = (_) => Utils.getMath(getDesc(q1.level));
         q1.getInfo = (amount) => Utils.getMathTo(getInfo(q1.level), getInfo(q1.level + amount));
     }
@@ -216,7 +216,8 @@ var init = () => {
     achievement6 = theory.createAchievement(5, "Exponential", "Unlock your forth milestone (1e100)", () => currencyR.value > 1e100); 
     achievement7 = theory.createAchievement(6, "Idle at last", "Unlock your fifth milestone (1e200)", () => currencyR.value > 1e200); 
     achievement8 = theory.createAchievement(7, "Variable Hell", "Cap a₁", () => a1.level >= 2000); 
-    achievement9 = theory.createAchievement(8, "pini", "Reach the end of the theories content (1e240)", () => currencyR.value > 1e240); 
+    achievement9 = theory.createAchievement(8, "Complex cumulatives", "Unlock q", () => qUnlock.level > 0); 
+    achievement10 = theory.createAchievement(9, "Big crunch", "Reach the floating point limit (1.8e308)", () => currencyR.value > 1.8e308); 
 
     ///////////////////
     //// Story chapters
@@ -272,9 +273,10 @@ var tick = (elapsedTime, multiplier) => {
 
     if (qUnlock.level > 0 && q1.level > 0){
         //log("qR: " + qR.toString() + ", qI: " +  qI.toString())
-        qTot = Math.max((qR.pow(2) + qI.pow(2)).pow(0.5), 1)
+        qTot = 1+0*(Math.max(qR + qI))
         qR += getQ1(q1.level) * (getC2(c2.level).pow(0.2) + getC1(c1.level).pow(0.1) * (c1.level % 2 === 0 ? 1 : 0.9876)) / qTot
-        qI += getQ1(q1.level) * (getC1(c1.level).pow(0.1) * (c1.level % 2 === 0 ? 0 : 0.15643)) / qTot
+        qI += getQ1(q1.level) * (getC1(c1.level).pow(0.1) * (c1.level % 2 === 0 ? 0 : 0.15643)) // qTot
+        
 
         temp = rhodotR
         rhodotR = rhodotR*qR - rhodotI*qI
@@ -288,6 +290,7 @@ var tick = (elapsedTime, multiplier) => {
     currencyI.value += dt * bonus * rhodotI;
 
     theory.invalidateTertiaryEquation();
+    theory.invalidatePrimaryEquation();
 }
 
 var postPublish = () =>
@@ -318,16 +321,16 @@ var setInternalState = (stateStr) =>
 var getPrimaryEquation = () => {
     let rhoPart = "\\rho = ";
 
-    rhoPart += qUnlock.level > 0 ?  "q" : ""
+    rhoPart += qUnlock.level > 0 ?  "q" : "";
     rhoPart += "\\sum_{n=1}^{4}\\sqrt{c_n^n}";
-    otherPart = "\\dot{\\rho_r} = a_1" + (a1Exp.level > 0 ? ("^{" + getA1Exponent(a1Exp.level).toString() + "}") : "") + "Re(\\rho), \\dot{\\rho_i} = a_2 "+ (a2Exp.level > 0 ? ("^{" + getA2Exponent(a2Exp.level).toString() + "}") : "") + " Im(\\rho)"
+    otherPart = "\\dot{\\rho_r} = a_1" + (a1Exp.level > 0 ? ("^{" + getA1Exponent(a1Exp.level).toString() + "}") : "") + "Re(\\rho), \\dot{\\rho_i} = a_2 "+ (a2Exp.level > 0 ? ("^{" + getA2Exponent(a2Exp.level).toString() + "}") : "") + " Im(\\rho)";
     
     theory.primaryEquationHeight = 90;
     return `\\begin{array}{c}${rhoPart}\\\\${otherPart}\\end{array}`;
 
 }
 
-var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho_r^{0.4}, \\dot{q} = q_1[-c_1^{0.1}+(c_2^2)^{0.1}]";
+var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho_r^{0.4}, \\dot{q} = q_1[c_1^{0.1}+(c_2^2)^{0.1}]";
 var getTertiaryEquation = () => "\\dot{\\rho_r} = " + bonus * rhodotR + ',\\dot{\\rho_i} = ' + bonus * rhodotI +
 (qUnlock.level > 0 ? (',q = ' + qR + "+" + render(qI) + "i") : "");
 var getPublicationMultiplier = (tau) => 0.5 * tau.pow(0.43);
@@ -342,7 +345,7 @@ var getC1 = (level) => BigNumber.TWO.pow(level) * (c1buff.level >= 1 ? 200 : 1)
 var getC2 = (level) => BigNumber.TWO.pow(level)
 var getC3 = (level) => BigNumber.TWO.pow(level)
 var getC4 = (level) => BigNumber.TWO.pow(level)
-var getQ1 = (level) => Utils.getStepwisePowerSum(level, 2, 10, 0)/1e26;
+var getQ1 = (level) => Utils.getStepwisePowerSum(level, 2, 10, 0)/1e30;
 var getA1Exponent = (level) => BigNumber.from(a12expTable[level]);
 var getA2Exponent = (level) => BigNumber.from(a12expTable[level]);
 
