@@ -78,7 +78,7 @@ var init = () => {
         let getInfo = (level) => "\\sqrt{c_1}=" + getC1(level).pow(0.5).toString(0) + ((level % 2 == 1) ? 'i' : '');
         c1 = theory.createUpgrade(2, currencyR, new CustomCost((level) => {
             if (level < 550) {return BigNumber.from(1.95).pow(level) * BigNumber.TEN};
-            return BigNumber.from(100).pow(level - 550) * BigNumber.from(1.95).pow(550) * BigNumber.from(12);
+            return BigNumber.from(100).pow(level - 550) * BigNumber.from(1.95).pow(550) * BigNumber.from(13);
         })); //10 * 1.95 ^ L
         //c1 = theory.createUpgrade(2, currencyR, new FreeCost());
         c1.getDescription = (_) => Utils.getMath(getDesc(c1.level));
@@ -203,7 +203,9 @@ var init = () => {
         qUnlock.getInfo = (amount) => Localization.getUpgradeUnlockInfo("q");
         qUnlock.boughtOrRefunded = (_) => {
             updateAvailability();
-            theory.invalidatePrimaryEquation();}
+            theory.invalidatePrimaryEquation();
+            theory.invalidateSecondaryEquation();
+        }
     }
 
     /////////////////
@@ -330,7 +332,7 @@ var getPrimaryEquation = () => {
 
 }
 
-var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho_r^{0.4}, \\dot{q} = q_1[c_1^{0.1}+(c_2^2)^{0.1}]";
+var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho_r^{0.4}" + (qUnlock.level > 0 ? ", \\dot{q} = q_1[c_1^{0.1}+(c_2^2)^{0.1}]" : "");
 var getTertiaryEquation = () => "\\dot{\\rho_r} = " + bonus * rhodotR + ',\\dot{\\rho_i} = ' + bonus * rhodotI +
 (qUnlock.level > 0 ? (',q = ' + qR + "+" + render(qI) + "i") : "");
 var getPublicationMultiplier = (tau) => 0.5 * tau.pow(0.43);
