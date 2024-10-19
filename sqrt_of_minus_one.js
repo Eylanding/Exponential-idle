@@ -328,7 +328,8 @@ var getPrimaryEquation = () => {
 }
 
 var getSecondaryEquation = () => theory.latexSymbol + "=\\max\\rho_r^{0.4}, \\dot{q} = q_1[-c_1^{0.1}+(c_2^2)^{0.1}]";
-var getTertiaryEquation = () => "\\dot{\\rho_r} = " + bonus * rhodotR + ',\\dot{\\rho_i} = ' + bonus * rhodotI + (qUnlock.level > 0 ? (',q = ' + qR + "+" + qI + "i") : "");
+var getTertiaryEquation = () => "\\dot{\\rho_r} = " + bonus * rhodotR + ',\\dot{\\rho_i} = ' + bonus * rhodotI +
+(qUnlock.level > 0 ? (',q = ' + qR + "+" + render(qI) + "i") : "");
 var getPublicationMultiplier = (tau) => 0.5 * tau.pow(0.43);
 var getPublicationMultiplierFormula = (symbol) => "0.5{" + symbol + "}^{0.43}";
 var getTau = () => currencyR.value.pow(0.4);
