@@ -11,7 +11,7 @@ var description =
 "This is a theory that plays around with the idea of using complex numbers and multiple currencies. You're going to have to make decisions " +
 "and figure out what to buy, because here the numbers are a little more complex\n\n" +
 "WIP: 240 / 1500 rho | Next: q\n" +
-"Version 1.2.0 Build 5");
+"Version 1.2.0 Build 9");
 var authors = "Eylanding";
 var version = 1;
 
@@ -77,8 +77,8 @@ var init = () => {
         let getDesc = (level) => "c_1="+ (c1buff.level >= 1 ? "200\\times" : "") +"(-2)^{" + level + "}";
         let getInfo = (level) => "\\sqrt{c_1}=" + getC1(level).pow(0.5).toString(0) + ((level % 2 == 1) ? 'i' : '');
         c1 = theory.createUpgrade(2, currencyR, new CustomCost((level) => {
-            if (level < 550) {return BigNumber.from(1.95).pow(level) * BigNumber.TEN};
-            return BigNumber.from(100).pow(level - 550) * BigNumber.from(1.95).pow(550) * BigNumber.from(13);
+            if (level < 500) {return BigNumber.from(1.95).pow(level) * BigNumber.TEN};
+            return BigNumber.from(110).pow(level - 500) * BigNumber.from(1.95).pow(500) * BigNumber.from(10);
         })); //10 * 1.95 ^ L
         //c1 = theory.createUpgrade(2, currencyR, new FreeCost());
         c1.getDescription = (_) => Utils.getMath(getDesc(c1.level));
@@ -116,7 +116,7 @@ var init = () => {
     {
         let getDesc = (level) => "q_1=" + render(getQ1(level));
         let getInfo = (level) => "q_1=" + render(getQ1(level));
-        q1 = theory.createUpgrade(6, currencyI, new ExponentialCost(10**210, Math.log2(15)));
+        q1 = theory.createUpgrade(6, currencyI, new ExponentialCost(10**210, Math.log2(8)));
         q1.getDescription = (_) => Utils.getMath(getDesc(q1.level));
         q1.getInfo = (amount) => Utils.getMathTo(getInfo(q1.level), getInfo(q1.level + amount));
     }
@@ -162,6 +162,9 @@ var init = () => {
             if(level == 3) return BigNumber.from(100 * 0.4);
             if(level == 4) return BigNumber.from(200 * 0.4);
             if(level == 5) return BigNumber.from(240 * 0.4);
+            if(level == 6) return BigNumber.from((Math.log10(1.8)+300) * 0.4);
+            if(level == 7) return BigNumber.from(240 * 0.4);
+            if(level == 8) return BigNumber.from(240 * 0.4);
             return BigNumber.from(-1);
         });
 
