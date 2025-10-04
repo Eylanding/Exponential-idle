@@ -30,7 +30,7 @@ let init = () =>
         c1.getInfo = (amount) => Utils.getMathTo(getInfo(c1.level), getInfo(c1.level + amount));
     }
     {
-        c2 = theory.createUpgrade(1, currency, new ExponentialCost(1e22, 1/0.3));
+        c2 = theory.createUpgrade(1, currency, new ExponentialCost(1e22, 1/0.2));
         let getDesc = (level) => `c_2 = 2^{${level.toString()}}`;
         c2.getDescription = (amount) => Utils.getMath(getDesc(c2.level));
         let getInfo = (level) => `c_2 = ${getC2(level).toString()}`;
@@ -44,7 +44,7 @@ let init = () =>
         q1.getInfo = (amount) => Utils.getMathTo(getInfo(q1.level), getInfo(q1.level + amount));
     }
     {
-        q2 = theory.createUpgrade(3, currency, new ExponentialCost(1e22, 1/0.25));
+        q2 = theory.createUpgrade(3, currency, new ExponentialCost(1e22, 1/0.15));
         let getDesc = (level) => `q_2 = 2^{${level.toString()}}`;
         q2.getDescription = (amount) => Utils.getMath(getDesc(q2.level));
         let getInfo = (level) => `q_2 = ${getQ2(level).toString()}`;
