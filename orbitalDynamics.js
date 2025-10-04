@@ -30,7 +30,7 @@ let init = () =>
         c1.getInfo = (amount) => Utils.getMathTo(getInfo(c1.level), getInfo(c1.level + amount));
     }
     {
-        c2 = theory.createUpgrade(1, currency, new ExponentialCost(1e21, 1/0.3));
+        c2 = theory.createUpgrade(1, currency, new ExponentialCost(1e22, 1/0.3));
         let getDesc = (level) => `c_2 = 2^{${level.toString()}}`;
         c2.getDescription = (amount) => Utils.getMath(getDesc(c2.level));
         let getInfo = (level) => `c_2 = ${getC2(level).toString()}`;
@@ -44,7 +44,7 @@ let init = () =>
         q1.getInfo = (amount) => Utils.getMathTo(getInfo(q1.level), getInfo(q1.level + amount));
     }
     {
-        q2 = theory.createUpgrade(3, currency, new ExponentialCost(1e21, 1/0.25));
+        q2 = theory.createUpgrade(3, currency, new ExponentialCost(1e22, 1/0.25));
         let getDesc = (level) => `q_2 = 2^{${level.toString()}}`;
         q2.getDescription = (amount) => Utils.getMath(getDesc(q2.level));
         let getInfo = (level) => `q_2 = ${getQ2(level).toString()}`;
@@ -57,9 +57,9 @@ let init = () =>
 
     {
         eccentricity = theory.createPermanentUpgrade(3, currency, new CustomCost((level) => {
-            if (level == 0) return BigNumber.from("1e50");
-            if (level == 1) return BigNumber.from("1e100");
-            if (level == 2) return BigNumber.from("1e200");
+            if (level == 0) return BigNumber.from("1e100");
+            if (level == 1) return BigNumber.from("1e200");
+            if (level == 2) return BigNumber.from("1e300");
             if (level == 3) return BigNumber.from("1e400");
             if (level == 4) return BigNumber.from("1e500");
             return BigNumber.from(-1);
@@ -76,7 +76,7 @@ let init = () =>
 
     const milestoneCost = new CustomCost((level) =>
         {
-            if(level == 0) return BigNumber.from(40);
+            if(level == 0) return BigNumber.from(50);
             if(level == 1) return BigNumber.from(75);
             if(level == 2) return BigNumber.from(125);
             if(level == 3) return BigNumber.from(150);
@@ -84,8 +84,8 @@ let init = () =>
             if(level == 5) return BigNumber.from(225);
             if(level == 6) return BigNumber.from(250);
             if(level == 7) return BigNumber.from(275);
-            if(level == 8) return BigNumber.from(300);
-            if(level == 9) return BigNumber.from(350);
+            if(level == 8) return BigNumber.from(350);
+            if(level == 9) return BigNumber.from(450);
             return BigNumber.from(-1);
         });
     
@@ -113,16 +113,16 @@ var tick = (elapsedTime, multiplier) =>
     let bonus = theory.publicationMultiplier;
     let r = (P.x ** 2 + P.y ** 2) ** 0.5;
     let v = (P.vx ** 2 + P.vy ** 2) ** 0.5;
-    let qdot = getQ1(q1.level) * getQ2(q2.level) * r;
+    let qdot = getQ1(q1.level) ** (1+0.05 * q1exp.level) * getQ2(q2.level) * r;
     q += qdot * dt;
-    let rhodot = getC1(c1.level) * getC2(c2.level) * q * v;
+    let rhodot = getC1(c1.level) ** (1+0.05 * c1exp.level) * getC2(c2.level) * q * v;
     currency.value += dt * bonus * rhodot;
     let accel = g*m1/(r**2);
     let direction = [-(P.x)/r, -(P.y)/r];
-    P.vx += accel * direction[0] * dt * 3e6;
-    P.vy += accel * direction[1] * dt * 3e6;
-    P.x += P.vx * dt * 3e6;
-    P.y += P.vy * dt * 3e6;
+    P.vx += accel * direction[0] * dt * 5e5;
+    P.vy += accel * direction[1] * dt * 5e5;
+    P.x += P.vx * dt * 5e5;
+    P.y += P.vy * dt * 5e5;
     theory.invalidateTertiaryEquation();
 }
 
@@ -140,8 +140,8 @@ var setInternalState = (stateStr) =>
     q = BigNumber.fromBase64String(state.q) ?? q;
 }
 
-var getPublicationMultiplier = (tau) => tau.pow(0.1);
-var getPublicationMultiplierFormula = (symbol) => `{${symbol}}^{${0.1}}`;
+var getPublicationMultiplier = (tau) => tau.pow(0.1) / 5000;
+var getPublicationMultiplierFormula = (symbol) => `{${symbol}}^{${0.1}} / 5000`;
 var getTau = () => currency.value;
 var getCurrencyFromTau = (tau) =>
 [
@@ -152,7 +152,8 @@ var getCurrencyFromTau = (tau) =>
 var getPrimaryEquation = () => `\\dot{\\rho} = c_1${c1exp.level ? `^{${1+c1exp.level * 0.05}}` : ""}c_2q|v_P|`;
 var getSecondaryEquation = () => `\\tau = \\max(\\rho), \\dot{q} = q_1${q1exp.level ? `^{${1+q1exp.level * 0.05}}` : ""}q_2|r_P|`
 var getTertiaryEquation = () => `r_P = [${P.x}, ${P.y}], q = ${q}`
-var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber();
+//var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber();
+var get3DGraphValue = () => new Vector3(P.x/1e11, P.y/1e11, 0)
 let getC2 = (level) => BigNumber.TWO.pow(level)
 let getC1 = (level) => Utils.getStepwisePowerSum(level, 2, 10, 0);
 let getQ2 = (level) => BigNumber.TWO.pow(level)
