@@ -51,9 +51,9 @@ let init = () =>
         q2.getInfo = (amount) => Utils.getMathTo(getInfo(q2.level), getInfo(q2.level + amount));
     }
 
-    theory.createPublicationUpgrade(0, currency, BigNumber.from('1e25'));
-    theory.createBuyAllUpgrade(1, currency, BigNumber.from('1e2'));
-    theory.createAutoBuyerUpgrade(2, currency, BigNumber.from('1e3'));
+    theory.createPublicationUpgrade(0, currency, BigNumber.from('1e27'));
+    theory.createBuyAllUpgrade(1, currency, BigNumber.from('1e25'));
+    theory.createAutoBuyerUpgrade(2, currency, BigNumber.from('1e30'));
 
     {
         eccentricity = theory.createPermanentUpgrade(3, currency, new CustomCost((level) => {
@@ -140,8 +140,8 @@ var setInternalState = (stateStr) =>
     q = BigNumber.fromBase64String(state.q) ?? q;
 }
 
-var getPublicationMultiplier = (tau) => tau.pow(0.1) / 5000;
-var getPublicationMultiplierFormula = (symbol) => `{${symbol}}^{${0.1}} / 5000`;
+var getPublicationMultiplier = (tau) => tau.pow(0.1) / 100;
+var getPublicationMultiplierFormula = (symbol) => `{${symbol}}^{${0.1}} / 100`;
 var getTau = () => currency.value;
 var getCurrencyFromTau = (tau) =>
 [
