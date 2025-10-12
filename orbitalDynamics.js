@@ -13,6 +13,7 @@ var authors = 'Eylanding';
 let currency;
 
 let P;
+let v;
 let q = BigNumber.ONE;
 const g = 6.67e-11;
 
@@ -58,8 +59,8 @@ let init = () =>
     {
         eccentricity = theory.createPermanentUpgrade(3, currency, new CustomCost((level) => {
             if (level == 0) return BigNumber.from("1e100");
-            if (level == 1) return BigNumber.from("1e200");
-            if (level == 2) return BigNumber.from("1e300");
+            if (level == 1) return BigNumber.from("1e160");
+            if (level == 2) return BigNumber.from("1e250");
             if (level == 3) return BigNumber.from("1e400");
             if (level == 4) return BigNumber.from("1e500");
             return BigNumber.from(-1);
@@ -78,14 +79,14 @@ let init = () =>
         {
             if(level == 0) return BigNumber.from(50);
             if(level == 1) return BigNumber.from(75);
-            if(level == 2) return BigNumber.from(125);
-            if(level == 3) return BigNumber.from(150);
-            if(level == 4) return BigNumber.from(175);
-            if(level == 5) return BigNumber.from(225);
-            if(level == 6) return BigNumber.from(250);
+            if(level == 2) return BigNumber.from(120);
+            if(level == 3) return BigNumber.from(140);
+            if(level == 4) return BigNumber.from(180);
+            if(level == 5) return BigNumber.from(200);
+            if(level == 6) return BigNumber.from(225);
             if(level == 7) return BigNumber.from(275);
-            if(level == 8) return BigNumber.from(350);
-            if(level == 9) return BigNumber.from(450);
+            if(level == 8) return BigNumber.from(300);
+            if(level == 9) return BigNumber.from(350);
             return BigNumber.from(-1);
         });
     
@@ -112,17 +113,17 @@ var tick = (elapsedTime, multiplier) =>
     let dt = BigNumber.from(elapsedTime * multiplier);
     let bonus = theory.publicationMultiplier;
     let r = (P.x ** 2 + P.y ** 2) ** 0.5;
-    let v = (P.vx ** 2 + P.vy ** 2) ** 0.5;
+    v = (P.vx ** 2 + P.vy ** 2) ** 0.5;
     let qdot = getQ1(q1.level) ** (1+0.05 * q1exp.level) * getQ2(q2.level) * r;
     q += qdot * dt;
     let rhodot = getC1(c1.level) ** (1+0.05 * c1exp.level) * getC2(c2.level) * q * v;
     currency.value += dt * bonus * rhodot;
     let accel = g*m1/(r**2);
     let direction = [-(P.x)/r, -(P.y)/r];
-    P.vx += accel * direction[0] * dt * 5e5;
-    P.vy += accel * direction[1] * dt * 5e5;
-    P.x += P.vx * dt * 5e5;
-    P.y += P.vy * dt * 5e5;
+    P.vx += accel * direction[0] * dt * 3e6;
+    P.vy += accel * direction[1] * dt * 3e6;
+    P.x += P.vx * dt * 3e6;
+    P.y += P.vy * dt * 3e6;
     theory.invalidateTertiaryEquation();
 }
 
@@ -138,10 +139,12 @@ var setInternalState = (stateStr) =>
 
     let state = JSON.parse(stateStr);
     q = BigNumber.fromBase64String(state.q) ?? q;
+    starting_velocity = Math.sqrt(m1 * g / 1.5e11) * 1.1**eccentricity.level;
+    P = {x:1.5e11,y:0,vx:0,vy:starting_velocity};
 }
 
-var getPublicationMultiplier = (tau) => tau.pow(0.1) / 100;
-var getPublicationMultiplierFormula = (symbol) => `{${symbol}}^{${0.1}} / 100`;
+var getPublicationMultiplier = (tau) => tau.pow(0.15) / 100;
+var getPublicationMultiplierFormula = (symbol) => `{${symbol}}^{${0.5}} / 100`;
 var getTau = () => currency.value;
 var getCurrencyFromTau = (tau) =>
 [
@@ -151,9 +154,13 @@ var getCurrencyFromTau = (tau) =>
 
 var getPrimaryEquation = () => `\\dot{\\rho} = c_1${c1exp.level ? `^{${1+c1exp.level * 0.05}}` : ""}c_2q|v_P|`;
 var getSecondaryEquation = () => `\\tau = \\max(\\rho), \\dot{q} = q_1${q1exp.level ? `^{${1+q1exp.level * 0.05}}` : ""}q_2|r_P|`
-var getTertiaryEquation = () => `r_P = [${P.x}, ${P.y}], q = ${q}`
+var getTertiaryEquation = () => `r_P = [${P.x}, ${P.y}], v=${Math.round(v)},q = ${q}`
 //var get2DGraphValue = () => currency.value.sign * (BigNumber.ONE + currency.value.abs()).log10().toNumber();
-var get3DGraphValue = () => new Vector3(P.x/1e11, P.y/1e11, 0)
+var get3DGraphPoint = () => {
+    let x = Number(P.x / 5e11);
+    let y = Number(P.y / 5e11);
+    return new Vector3(x, y, 0.0);
+}
 let getC2 = (level) => BigNumber.TWO.pow(level)
 let getC1 = (level) => Utils.getStepwisePowerSum(level, 2, 10, 0);
 let getQ2 = (level) => BigNumber.TWO.pow(level)
